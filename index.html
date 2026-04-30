@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#07071a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="ثقافة">
+<meta name="mobile-web-app-capable" content="yes">
+<title>ثقافة — اكتسب معرفة كل يوم</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&family=Cairo:wght@700;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ══════════════════════════════════════════
+   ROOT & RESET
+══════════════════════════════════════════ */
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+  --bg:#07071a;
+  --s1:#0e0e24;
+  --s2:#14142e;
+  --s3:#1c1c3a;
+  --s4:#222244;
+  --bd:#2a2a52;
+  --bd2:#383870;
+  --gold:#f6c94e;
+  --gold2:#d4a017;
+  --acc:#5a4fcf;
+  --acc2:#9b8ef8;
+  --acc3:#c4bafe;
+  --gr:#0dd9c8;
+  --gr2:#06b6aa;
+  --rd:#f0628a;
+  --tx:#e2dcff;
+  --tx2:#c8c0f0;
+  --dim:#6860a8;
+  --dim2:#9088c8;
+  --mono:'IBM Plex Mono',monospace;
+  --radius:14px;
+  --sidebar-w:240px;
+  --sft:env(safe-area-inset-top,0px);
+  --sfb:env(safe-area-inset-bottom,0px);
+  --sfl:env(safe-area-inset-left,0px);
+  --sfr:env(safe-area-inset-right,0px);
+}
+html{height:100%;scroll-behavior:smooth}
+body{
+  font-family:'Tajawal',sans-serif;
+  background:var(--bg);color:var(--tx);
+  direction:rtl;min-height:100dvh;
+  overflow-x:hidden;
+}
+
+/* grid texture */
+body::before{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(ellipse 60% 40% at 20% 10%,rgba(90,79,207,.12) 0%,transparent 70%),
+    radial-gradient(ellipse 40% 60% at 80% 80%,rgba(13,217,200,.07) 0%,transparent 70%),
+    linear-gradient(rgba(90,79,207,.03) 1px,transparent 1px) 0 0/44px 44px,
+    linear-gradient(90deg,rgba(90,79,207,.03) 1px,transparent 1px) 0 0/44px 44px;
+}
+body::after{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.018;
+  background:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E") center/200px;
+}
+
+/* ══════════════════════════════════════════
+   LAYOUT SHELL — DESKTOP SIDEBAR
+══════════════════════════════════════════ */
+.shell{
+  position:relative;z-index:1;
+  display:flex;
+  min-height:100dvh;
+}
+
+/* ── SIDEBAR (desktop) ── */
+.sidebar{
+  width:var(--sidebar-w);
+  flex-shrink:0;
+  position:fixed;top:0;right:0;bottom:0;
+  background:rgba(14,14,36,.95);
+  backdrop-filter:blur(24px);
+  -webkit-backdrop-filter:blur(24px);
+  border-left:1px solid var(--bd);
+  display:flex;
+  flex-direction:column;
+  padding:28px 0 20px;
+  z-index:200;
+  padding-top:calc(28px + var(--sft));
+}
+.sb-brand{padding:0 20px 24px;border-bottom:1px solid var(--bd)}
+.sb-logo{
+  font-family:'Cairo',sans-serif;font-weight:900;font-size:1.7rem;
+  background:linear-gradient(135deg,var(--gold),var(--acc2));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.sb-sub{font-size:.62rem;color:var(--dim);font-family:var(--mono);letter-spacing:1.5px;margin-top:2px}
+.sb-datetime{margin-top:14px;display:flex;flex-direction:column;gap:5px}
+.dt-pill{
+  font-family:var(--mono);font-size:.7rem;color:var(--dim2);
+  background:var(--s2);border:1px solid var(--bd);border-radius:7px;
+  padding:4px 10px;display:flex;align-items:center;gap:6px;
+}
+.dt-dot{width:5px;height:5px;border-radius:50%;background:var(--gr);animation:pulse 2s infinite;flex-shrink:0}
+
+.sb-streak{
+  margin-top:12px;
+  background:linear-gradient(135deg,rgba(246,201,78,.15),rgba(246,201,78,.05));
+  border:1px solid rgba(246,201,78,.25);border-radius:10px;
+  padding:10px 14px;display:flex;align-items:center;gap:8px;
+  font-size:.83rem;font-weight:800;color:var(--gold);
+}
+.sb-streak-num{font-family:var(--mono);font-size:1.4rem;font-weight:900;line-height:1}
+
+.sb-nav{flex:1;padding:20px 12px;display:flex;flex-direction:column;gap:4px;overflow-y:auto}
+.snav{
+  display:flex;align-items:center;gap:11px;
+  padding:11px 14px;border:none;border-radius:11px;
+  background:transparent;color:var(--dim2);cursor:pointer;
+  font-family:'Tajawal',sans-serif;font-size:.9rem;font-weight:700;
+  transition:all .22s;text-align:right;width:100%;
+}
+.snav .sni{font-size:1.15rem;flex-shrink:0;transition:transform .22s}
+.snav:hover{background:var(--s3);color:var(--tx2)}
+.snav.on{background:linear-gradient(135deg,rgba(90,79,207,.25),rgba(155,142,248,.08));color:var(--acc3);border:1px solid rgba(90,79,207,.3)}
+.snav.on .sni{transform:scale(1.15)}
+
+.sb-footer{padding:0 16px;font-size:.63rem;color:var(--dim);font-family:var(--mono);text-align:center;opacity:.6}
+
+/* ── MAIN CONTENT (desktop) ── */
+.main{
+  flex:1;
+  margin-right:var(--sidebar-w);
+  max-width:calc(100% - var(--sidebar-w));
+  min-height:100dvh;
+  padding:32px 36px 60px;
+}
+
+/* ── BOTTOM NAV (mobile only — hidden on desktop) ── */
+.bnav{display:none}
+
+/* ══════════════════════════════════════════
+   MOBILE ≤ 860px — switch to bottom nav
+══════════════════════════════════════════ */
+@media(max-width:860px){
+  .sidebar{display:none}
+  .main{
+    margin-right:0;max-width:100%;
+    padding:16px 14px calc(74px + var(--sfb));
+    padding-top:calc(16px + var(--sft));
+  }
+  .bnav{
+    display:flex;
+    position:fixed;bottom:0;left:0;right:0;z-index:300;
+    background:rgba(7,7,26,.96);
+    backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+    border-top:1px solid var(--bd);
+    padding:7px 6px calc(7px + var(--sfb));
+    gap:3px;
+  }
+  .nb{
+    flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;
+    padding:7px 2px;border:none;border-radius:11px;
+    background:transparent;color:var(--dim);cursor:pointer;
+    font-family:'Tajawal',sans-serif;transition:all .2s;
+  }
+  .nb .ni{font-size:1.22rem;line-height:1;transition:transform .2s}
+  .nb .nl{font-size:.58rem;font-weight:700;white-space:nowrap}
+  .nb.on{background:rgba(90,79,207,.15);color:var(--acc2)}
+  .nb.on .ni{transform:scale(1.15)}
+  .nb:active .ni{transform:scale(.88)}
+  /* mobile header strip */
+  .mob-hdr{
+    display:flex;justify-content:space-between;align-items:flex-start;
+    padding-bottom:14px;border-bottom:1px solid var(--bd);margin-bottom:18px;
+  }
+}
+@media(min-width:861px){
+  .mob-hdr{display:none}
+}
+
+/* ══════════════════════════════════════════
+   PAGES
+══════════════════════════════════════════ */
+.pg{display:none}
+.pg.on{display:block;animation:fi .25s ease}
+@keyframes fi{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+/* ══════════════════════════════════════════
+   SECTION TITLE
+══════════════════════════════════════════ */
+.sec{
+  font-size:.75rem;font-weight:900;color:var(--gold);
+  margin-bottom:16px;display:flex;align-items:center;gap:8px;
+  text-transform:uppercase;letter-spacing:1.4px;
+}
+.sec::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--gold),transparent)}
+
+/* ══════════════════════════════════════════
+   INSTALL BANNER
+══════════════════════════════════════════ */
+.ib{
+  display:none;margin-bottom:18px;
+  background:rgba(90,79,207,.1);border:1px solid rgba(90,79,207,.3);
+  border-radius:var(--radius);padding:13px 16px;
+  align-items:center;gap:10px;
+}
+.ib.on{display:flex}
+.ib-t{flex:1;font-size:.82rem;font-weight:600;line-height:1.5}
+.ib-btn{
+  padding:8px 16px;background:linear-gradient(135deg,var(--acc),var(--acc2));
+  border:none;border-radius:18px;color:#fff;font-size:.8rem;font-weight:700;
+  cursor:pointer;white-space:nowrap;font-family:'Tajawal',sans-serif;flex-shrink:0;
+  transition:transform .15s;
+}
+.ib-btn:hover{transform:scale(1.04)}
+.ib-x{background:none;border:none;color:var(--dim);cursor:pointer;font-size:1rem;padding:0 2px;flex-shrink:0}
+
+/* ══════════════════════════════════════════
+   TODAY PAGE
+══════════════════════════════════════════ */
+.done-ok{
+  background:rgba(13,217,200,.07);border:1px solid rgba(13,217,200,.25);
+  border-radius:var(--radius);padding:13px 18px;color:var(--gr);
+  font-weight:700;margin-bottom:16px;font-size:.9rem;
+  display:none;align-items:center;justify-content:center;gap:8px;
+}
+.done-ok.on{display:flex}
+.done-btn{
+  width:100%;padding:15px;border:none;border-radius:var(--radius);
+  background:linear-gradient(135deg,var(--gr2),var(--gr));color:#000;
+  font-size:1rem;font-weight:900;cursor:pointer;margin-bottom:18px;
+  font-family:'Tajawal',sans-serif;transition:transform .15s,box-shadow .15s;
+  letter-spacing:.3px;
+}
+.done-btn:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(13,217,200,.25)}
+.done-btn:active{transform:scale(.97)}
+
+/* info cards */
+.icard{
+  background:var(--s1);border:1px solid var(--bd);
+  border-radius:var(--radius);margin-bottom:9px;overflow:hidden;
+  cursor:pointer;transition:border-color .2s,transform .15s;
+}
+.icard:hover{border-color:var(--acc);transform:translateY(-1px)}
+.icard.on{border-color:var(--acc2)}
+.ch{padding:14px 16px;display:flex;align-items:flex-start;gap:10px;user-select:none}
+.cn{
+  min-width:28px;height:28px;border-radius:8px;flex-shrink:0;
+  background:linear-gradient(135deg,var(--acc),var(--acc2));
+  display:flex;align-items:center;justify-content:center;
+  font-weight:900;font-size:.73rem;color:#fff;font-family:var(--mono);
+}
+.cq{flex:1;font-weight:600;line-height:1.65;font-size:.92rem;padding-top:2px}
+.cc{font-size:.62rem;padding:2px 8px;border-radius:12px;font-weight:800;flex-shrink:0;margin-top:3px}
+.ca-arr{color:var(--dim);font-size:1rem;flex-shrink:0;padding-top:2px;transition:transform .3s}
+.icard.on .ca-arr{transform:rotate(180deg)}
+.ca{
+  max-height:0;overflow:hidden;
+  transition:max-height .38s cubic-bezier(.4,0,.2,1),padding .28s;
+  padding:0 16px;background:var(--s2);color:var(--dim2);font-size:.87rem;line-height:1.85;
+}
+.icard.on .ca{max-height:300px;padding:13px 16px;border-top:1px solid var(--bd)}
+.cal{font-size:.62rem;font-weight:900;color:var(--gold);display:block;margin-bottom:6px;letter-spacing:1.5px;text-transform:uppercase}
+
+/* cat badges */
+.cg{background:rgba(56,189,248,.12);color:#38bdf8}
+.cs{background:rgba(13,217,200,.12);color:var(--gr)}
+.ch2{background:rgba(246,201,78,.12);color:var(--gold)}
+.ca2{background:rgba(240,98,138,.12);color:var(--rd)}
+.cr{background:rgba(253,203,110,.12);color:#fdcb6e}
+.ct{background:rgba(155,142,248,.12);color:var(--acc2)}
+.ce{background:rgba(200,192,240,.1);color:var(--tx2)}
+
+/* ══════════════════════════════════════════
+   GAME
+══════════════════════════════════════════ */
+.gp{margin-bottom:18px}
+.gr2{display:flex;justify-content:space-between;font-size:.78rem;color:var(--dim);margin-bottom:8px;font-family:var(--mono)}
+.gsv{color:var(--gold);font-weight:700}
+.gbar{background:var(--s2);border-radius:50px;height:5px;overflow:hidden;border:1px solid var(--bd)}
+.gfill{height:100%;background:linear-gradient(90deg,var(--acc),var(--gold));border-radius:50px;transition:width .5s}
+.gcard{background:var(--s1);border:1px solid var(--bd);border-radius:16px;padding:22px 20px}
+.gq{font-weight:700;font-size:1rem;line-height:1.75;margin-bottom:20px}
+.gopts{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+@media(max-width:480px){.gopts{grid-template-columns:1fr}}
+.gopt{
+  padding:13px 10px;border:1.5px solid var(--bd);border-radius:12px;
+  background:var(--s2);color:var(--tx);font-size:.87rem;font-weight:600;
+  cursor:pointer;line-height:1.4;text-align:center;
+  font-family:'Tajawal',sans-serif;transition:all .18s;
+}
+.gopt:hover:not(:disabled){border-color:var(--acc);background:rgba(90,79,207,.1)}
+.gopt:active:not(:disabled){transform:scale(.96)}
+.gopt.ok{border-color:var(--gr)!important;background:rgba(13,217,200,.1)!important;color:var(--gr)!important}
+.gopt.bad{border-color:var(--rd)!important;background:rgba(240,98,138,.1)!important;color:var(--rd)!important}
+.gopt:disabled{cursor:default}
+.gfb{margin-top:13px;padding:11px 14px;border-radius:10px;font-weight:700;font-size:.9rem;display:none}
+.gfb.on{display:block}
+.gfb.ok{background:rgba(13,217,200,.07);border:1px solid rgba(13,217,200,.25);color:var(--gr)}
+.gfb.bad{background:rgba(240,98,138,.07);border:1px solid rgba(240,98,138,.25);color:var(--rd)}
+.gnxt{
+  margin-top:13px;padding:12px 28px;
+  background:linear-gradient(135deg,var(--acc),var(--acc2));
+  border:none;border-radius:50px;color:#fff;font-size:.93rem;font-weight:700;
+  cursor:pointer;display:none;font-family:'Tajawal',sans-serif;
+  transition:transform .15s,box-shadow .15s;
+}
+.gnxt:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(90,79,207,.35)}
+.gnxt:active{transform:scale(.95)}
+.gres{
+  background:var(--s1);border:1px solid var(--bd);border-radius:18px;
+  padding:44px 28px;text-align:center;display:none;
+}
+.gre{font-size:3.5rem;margin-bottom:14px}
+.grs{
+  font-size:3rem;font-weight:900;margin-bottom:10px;
+  background:linear-gradient(135deg,var(--gold),var(--acc2));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  font-family:var(--mono);
+}
+.grm{color:var(--dim2);margin-bottom:26px;font-size:.97rem}
+.grc{
+  padding:14px 36px;background:linear-gradient(135deg,var(--gold2),var(--gold));
+  border:none;border-radius:50px;color:#000;font-size:1rem;font-weight:900;
+  cursor:pointer;font-family:'Tajawal',sans-serif;transition:transform .15s;
+}
+.grc:hover{transform:translateY(-2px)}
+
+/* ══════════════════════════════════════════
+   PATH
+══════════════════════════════════════════ */
+.pscroll{
+  display:flex;gap:8px;overflow-x:auto;padding-bottom:12px;
+  scrollbar-width:thin;scrollbar-color:var(--bd) transparent;
+  -webkit-overflow-scrolling:touch;
+}
+.pscroll::-webkit-scrollbar{height:4px}
+.pscroll::-webkit-scrollbar-track{background:transparent}
+.pscroll::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:4px}
+.pday{
+  flex-shrink:0;width:56px;display:flex;flex-direction:column;
+  align-items:center;gap:4px;cursor:pointer;transition:transform .2s;
+}
+.pday:hover{transform:translateY(-3px)}
+.pday:active .pcircle{transform:scale(.9)}
+.pcircle{
+  width:48px;height:48px;border-radius:50%;
+  border:2px solid var(--bd);background:var(--s1);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--mono);font-size:.77rem;font-weight:700;color:var(--dim);
+  transition:all .22s;position:relative;user-select:none;
+}
+.pcircle.dn{border-color:var(--gr);background:rgba(13,217,200,.09);color:var(--gr)}
+.pcircle.td{
+  border-color:var(--gold);background:rgba(246,201,78,.1);color:var(--gold);
+  box-shadow:0 0 16px rgba(246,201,78,.25);
+}
+.pcircle.ft{opacity:.35}
+.pchk{
+  position:absolute;top:-3px;right:-3px;width:16px;height:16px;
+  border-radius:50%;background:var(--gr);
+  display:flex;align-items:center;justify-content:center;
+  font-size:.52rem;color:#000;font-weight:900;
+}
+.plbl{font-size:.6rem;color:var(--dim);font-weight:600;text-align:center;user-select:none}
+.plbl.td{color:var(--gold)}
+.pdetail{margin-top:22px}
+
+/* ══════════════════════════════════════════
+   ARCHIVE (المسودة)
+══════════════════════════════════════════ */
+.aday{background:var(--s1);border:1px solid var(--bd);border-radius:var(--radius);margin-bottom:11px;overflow:hidden}
+.ahead{
+  padding:14px 16px;display:flex;justify-content:space-between;align-items:center;
+  cursor:pointer;background:var(--s2);transition:background .18s;user-select:none;
+}
+.ahead:hover{background:var(--s3)}
+.ahead:active{background:var(--s4)}
+.ahL{display:flex;align-items:center;gap:8px}
+.adate{font-weight:700;font-size:.92rem}
+.adn{font-family:var(--mono);font-size:.65rem;color:var(--dim);background:var(--s3);padding:2px 7px;border-radius:4px}
+.abadge{font-size:.68rem;font-weight:800;padding:3px 11px;border-radius:14px;background:rgba(13,217,200,.1);color:var(--gr)}
+.abody{display:none;padding:14px 16px}
+.abody.on{display:block}
+.atabs{display:flex;gap:6px;margin-bottom:13px}
+.atab{
+  padding:7px 16px;border:1px solid var(--bd);border-radius:20px;
+  background:transparent;color:var(--dim);font-size:.76rem;font-weight:700;
+  cursor:pointer;transition:all .2s;font-family:'Tajawal',sans-serif;
+}
+.atab:hover{border-color:var(--bd2);color:var(--tx2)}
+.atab.on{background:var(--acc);border-color:var(--acc);color:#fff}
+.atab:active{transform:scale(.95)}
+.rq{padding:9px 0;border-bottom:1px solid var(--bd)}
+.rq:last-child{border-bottom:none}
+.rqt{font-weight:600;margin-bottom:3px;font-size:.87rem}
+.rqa{color:var(--gold);font-size:.81rem;line-height:1.6}
+/* mini game */
+.mgwrap{padding-top:4px}
+.mgq{
+  font-weight:700;font-size:.9rem;line-height:1.7;margin-bottom:13px;
+  padding:13px;background:var(--s3);border-radius:10px;
+  border-right:3px solid var(--acc);
+}
+.mgopts{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:9px}
+@media(max-width:480px){.mgopts{grid-template-columns:1fr}}
+.mgopt{
+  padding:11px 9px;border:1.5px solid var(--bd);border-radius:10px;
+  background:var(--s2);color:var(--tx);font-size:.83rem;font-weight:600;
+  cursor:pointer;text-align:center;font-family:'Tajawal',sans-serif;transition:all .18s;
+}
+.mgopt:hover:not(:disabled){border-color:var(--acc)}
+.mgopt:active:not(:disabled){transform:scale(.95)}
+.mgopt.ok{border-color:var(--gr)!important;background:rgba(13,217,200,.09)!important;color:var(--gr)!important}
+.mgopt.bad{border-color:var(--rd)!important;background:rgba(240,98,138,.07)!important;color:var(--rd)!important}
+.mgopt:disabled{cursor:default}
+.mgnav{display:flex;justify-content:space-between;align-items:center;margin-top:8px;font-size:.79rem;color:var(--dim)}
+.mgsc{font-family:var(--mono);color:var(--gold);font-weight:700}
+.mgnxt{
+  padding:7px 20px;background:var(--acc);border:none;border-radius:20px;
+  color:#fff;font-size:.8rem;font-weight:700;cursor:pointer;
+  display:none;font-family:'Tajawal',sans-serif;transition:transform .15s;
+}
+.mgnxt:hover{transform:scale(1.04)}
+
+/* ══════════════════════════════════════════
+   TRACKER
+══════════════════════════════════════════ */
+.strow{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px}
+.stbox{
+  background:var(--s1);border:1px solid var(--bd);border-radius:var(--radius);
+  padding:18px 12px;text-align:center;position:relative;overflow:hidden;
+}
+.stbox::before{
+  content:'';position:absolute;top:-20px;left:-20px;width:70px;height:70px;
+  border-radius:50%;background:var(--acc);opacity:.04;
+}
+.stn{font-size:2.2rem;font-weight:900;color:var(--gold);font-family:var(--mono)}
+.stl{font-size:.62rem;color:var(--dim);margin-top:5px;font-weight:700;text-transform:uppercase;letter-spacing:.8px}
+.clblr{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:6px}
+.clbl{font-size:.57rem;color:var(--dim);text-align:center;font-weight:700}
+.cgrid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:10px}
+.cday{
+  aspect-ratio:1;border-radius:8px;display:flex;align-items:center;justify-content:center;
+  font-size:.64rem;font-weight:700;border:1.5px solid var(--bd);background:var(--s1);
+  color:var(--dim);font-family:var(--mono);transition:all .2s;cursor:default;
+}
+.cday:hover{border-color:var(--bd2)}
+.cday.dn{border-color:var(--gr);background:rgba(13,217,200,.09);color:var(--gr)}
+.cday.td{border-color:var(--gold);background:rgba(246,201,78,.09);color:var(--gold);box-shadow:0 0 10px rgba(246,201,78,.15)}
+.cday.sk{border-color:var(--rd);background:rgba(240,98,138,.05);color:var(--rd);opacity:.6}
+.leg{display:flex;gap:16px;flex-wrap:wrap;font-size:.72rem;color:var(--dim);margin-top:12px}
+.li{display:flex;align-items:center;gap:5px}
+.ld{width:11px;height:11px;border-radius:3px;flex-shrink:0}
+
+/* ══════════════════════════════════════════
+   MISC
+══════════════════════════════════════════ */
+.empty{text-align:center;padding:60px 20px;color:var(--dim)}
+.empi{font-size:3rem;margin-bottom:12px;opacity:.45}
+.empt{font-size:.95rem;line-height:1.6}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+@keyframes su{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.su{animation:su .35s ease both}
+</style>
+</head>
+<body>
+
+<div class="shell">
+
+  <!-- ══ SIDEBAR (desktop) ══ -->
+  <aside class="sidebar">
+    <div class="sb-brand">
+      <div class="sb-logo">ثقافة</div>
+      <div class="sb-sub">THAQAFA · KNOWLEDGE</div>
+      <div class="sb-datetime">
+        <div class="dt-pill"><span class="dt-dot"></span><span id="sbDate">...</span></div>
+        <div class="dt-pill">⏱&nbsp;<span id="sbTime">...</span></div>
+      </div>
+      <div class="sb-streak">
+        <span style="font-size:1.5rem">🔥</span>
+        <div>
+          <div class="sb-streak-num" id="sbStreak">0</div>
+          <div style="font-size:.65rem;font-weight:600;opacity:.7">يوم متتالي</div>
+        </div>
+      </div>
+    </div>
+    <nav class="sb-nav">
+      <button class="snav on" id="sn-today"   onclick="goTo('today')">  <span class="sni">📚</span> اليوم</button>
+      <button class="snav"    id="sn-game"    onclick="goTo('game')">   <span class="sni">🎮</span> تحدي اليوم</button>
+      <button class="snav"    id="sn-path"    onclick="goTo('path')">   <span class="sni">🗺️</span> المسار</button>
+      <button class="snav"    id="sn-archive" onclick="goTo('archive')"><span class="sni">📓</span> المسودة</button>
+      <button class="snav"    id="sn-tracker" onclick="goTo('tracker')"><span class="sni">📊</span> التقدم</button>
+    </nav>
+    <div class="sb-footer">thaqafa © 2025</div>
+  </aside>
+
+  <!-- ══ MAIN ══ -->
+  <main class="main">
+
+    <!-- mobile header -->
+    <div class="mob-hdr">
+      <div>
+        <div style="font-family:'Cairo',sans-serif;font-weight:900;font-size:1.6rem;background:linear-gradient(135deg,var(--gold),var(--acc2));-webkit-background-clip:text;-webkit-text-fill-color:transparent">ثقافة</div>
+        <div style="font-size:.62rem;color:var(--dim);font-family:var(--mono);letter-spacing:1.2px">اكتسب معرفة كل يوم</div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px">
+        <div class="dt-pill"><span class="dt-dot"></span><span id="mbDate">...</span></div>
+        <div class="dt-pill">⏱&nbsp;<span id="mbTime">...</span></div>
+        <div style="background:linear-gradient(135deg,var(--gold2),var(--gold));color:#000;font-weight:900;padding:5px 12px;border-radius:20px;font-size:.78rem">🔥 <span id="mbStreak">0</span></div>
+      </div>
+    </div>
+
+    <!-- install banner -->
+    <div class="ib" id="ib">
+      <div class="ib-t">📲 أضف التطبيق لشاشتك الرئيسية للوصول السريع</div>
+      <button class="ib-btn" onclick="installPWA()">تثبيت</button>
+      <button class="ib-x" onclick="hideIB()">✕</button>
+    </div>
+
+    <!-- TODAY -->
+    <div id="pg-today" class="pg on">
+      <div class="done-ok" id="doneOk">✅ أحسنت! أكملت معلومات اليوم</div>
+      <button class="done-btn" id="doneBtn" onclick="markDone()">✅ أكملت قراءة معلومات اليوم</button>
+      <div class="sec">📋 معلومات اليوم العشر</div>
+      <div id="cardList"></div>
+    </div>
+
+    <!-- GAME -->
+    <div id="pg-game" class="pg">
+      <div class="gp">
+        <div class="gr2"><span id="gLbl">سؤال 1 من 10</span><span class="gsv">🎯 <span id="gSc">0</span> صح</span></div>
+        <div class="gbar"><div class="gfill" id="gFill" style="width:0%"></div></div>
+      </div>
+      <div class="gcard" id="gCard">
+        <div class="gq" id="gQ"></div>
+        <div class="gopts" id="gOpts"></div>
+        <div class="gfb" id="gFb"></div>
+        <button class="gnxt" id="gNxt" onclick="nextQ()">التالي ←</button>
+      </div>
+      <div class="gres" id="gRes">
+        <div class="gre" id="gRE">🏆</div>
+        <div class="grs" id="gRS"></div>
+        <div class="grm" id="gRM"></div>
+        <button class="grc" onclick="completeGame()">✅ احتسب اليوم وانهِ</button>
+      </div>
+    </div>
+
+    <!-- PATH -->
+    <div id="pg-path" class="pg">
+      <div class="sec">🗺️ مسار أيامك — 30 يوماً</div>
+      <div class="pscroll" id="pScroll"></div>
+      <div class="pdetail" id="pDetail"></div>
+    </div>
+
+    <!-- ARCHIVE -->
+    <div id="pg-archive" class="pg">
+      <div class="sec">📓 المسودة — جميع أيامك</div>
+      <div id="arcList"></div>
+    </div>
+
+    <!-- TRACKER -->
+    <div id="pg-tracker" class="pg">
+      <div class="sec">📊 إحصائياتك</div>
+      <div class="strow">
+        <div class="stbox"><div class="stn" id="stD">0</div><div class="stl">أيام مكتملة</div></div>
+        <div class="stbox"><div class="stn" id="stS">0</div><div class="stl">متتالية</div></div>
+        <div class="stbox"><div class="stn" id="stI">0</div><div class="stl">معلومة مكتسبة</div></div>
+      </div>
+      <div class="sec">🗓️ تقويم آخر 30 يوماً</div>
+      <div class="clblr">
+        <div class="clbl">أح</div><div class="clbl">إث</div><div class="clbl">ث</div>
+        <div class="clbl">أر</div><div class="clbl">خ</div><div class="clbl">ج</div><div class="clbl">س</div>
+      </div>
+      <div class="cgrid" id="cGrid"></div>
+      <div class="leg">
+        <div class="li"><span class="ld" style="background:rgba(13,217,200,.09);border:1px solid var(--gr)"></span>أكملت</div>
+        <div class="li"><span class="ld" style="background:rgba(246,201,78,.09);border:1px solid var(--gold)"></span>اليوم</div>
+        <div class="li"><span class="ld" style="background:rgba(240,98,138,.05);border:1px solid var(--rd)"></span>فاتك</div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- BOTTOM NAV (mobile) -->
+<nav class="bnav">
+  <button class="nb on" id="nb-today"   onclick="goTo('today')">  <span class="ni">📚</span><span class="nl">اليوم</span></button>
+  <button class="nb"    id="nb-game"    onclick="goTo('game')">   <span class="ni">🎮</span><span class="nl">تحدي</span></button>
+  <button class="nb"    id="nb-path"    onclick="goTo('path')">   <span class="ni">🗺️</span><span class="nl">المسار</span></button>
+  <button class="nb"    id="nb-archive" onclick="goTo('archive')"><span class="ni">📓</span><span class="nl">المسودة</span></button>
+  <button class="nb"    id="nb-tracker" onclick="goTo('tracker')"><span class="ni">📊</span><span class="nl">تقدم</span></button>
+</nav>
+
+<script>
+// ══════════════════════════════════════════
+// DATA
+// ══════════════════════════════════════════
+const ALL_DAYS={"0":[{"q":"ما هو أعلى جبل في العالم؟","a":"قمة إيفرست بارتفاع 8,849 متراً فوق مستوى البحر، تقع على الحدود بين نيبال والتبت.","cat":"جغرافيا","opts":["K2","لوتسي","إيفرست","كانشنجونغا"],"correct":"إيفرست"},{"q":"من هو مؤسس علم الجبر؟","a":"محمد بن موسى الخوارزمي، العالم العربي الذي أسّس علم الجبر في القرن التاسع الميلادي، ومنه اشتُقّ الاسم.","cat":"تاريخ","opts":["الكندي","الخوارزمي","ابن سينا","الفارابي"],"correct":"الخوارزمي"},{"q":"كم قارة على كوكب الأرض؟","a":"سبع قارات: آسيا، أفريقيا، أمريكا الشمالية، أمريكا الجنوبية، أنتاركتيكا، أوروبا، أستراليا.","cat":"جغرافيا","opts":["7","5","8","6"],"correct":"7"},{"q":"ما هي لغة البرمجة التي طورها جيمس غوسلينغ؟","a":"جافا Java، طوّرها في شركة Sun Microsystems وأُطلقت عام 1995 وتُستخدم في المليارات من الأجهزة.","cat":"تقنية","opts":["روبي","بايثون","جافا","C++"],"correct":"جافا"},{"q":"ما هو أكثر فيلم إيرادات في تاريخ السينما؟","a":"فيلم Avatar (2009) للمخرج جيمس كاميرون بإيرادات تجاوزت 2.9 مليار دولار عالمياً.","cat":"فنون","opts":["Avengers Endgame","Titanic","Avatar","The Lion King"],"correct":"Avatar"},{"q":"ما هو الرقم العشري الثابت (باي π) تقريباً؟","a":"3.14159، ويمثّل نسبة محيط الدائرة إلى قطرها وهو رقم لا نهائي وغير متكرر.","cat":"علوم","opts":["22/7","3.14159","3.14","3.1416"],"correct":"3.14159"},{"q":"من اخترع الهاتف؟","a":"ألكسندر غراهام بيل، اخترعه عام 1876 وحصل على أول براءة اختراع للهاتف.","cat":"تقنية","opts":["غوليلمو ماركوني","توماس إديسون","ألكسندر غراهام بيل","نيكولا تسلا"],"correct":"ألكسندر غراهام بيل"},{"q":"ما هو أطول جسر في العالم؟","a":"جسر دانيانغ كونشان في الصين بطول 164.8 كيلومتر، وهو خط سكة حديد فائق السرعة.","cat":"عامة","opts":["جسر تشينغداو","دانيانغ كونشان الصيني","جسر هونغ كونغ","جسر أكاشي"],"correct":"دانيانغ كونشان الصيني"},{"q":"من أسس شركة آبل Apple؟","a":"ستيف جوبز وستيف وزنياك ورونالد واين، أسسوها عام 1976 في مرآب منزلي بكاليفورنيا.","cat":"تقنية","opts":["مارك زوكربيرغ","بيل غيتس","جوبز ووزنياك","لاري بيدج"],"correct":"جوبز ووزنياك"},{"q":"ما هو أكثر عنصر شيوعاً في قشرة الأرض؟","a":"الأكسجين بنسبة 46%، يليه السيليكون بنسبة 28%، فالألمنيوم بنسبة 8%.","cat":"علوم","opts":["الحديد","الأكسجين","الألمنيوم","السيليكون"],"correct":"الأكسجين"}],"1":[{"q":"من هو مكتشف البنسلين؟","a":"ألكسندر فليمينغ عام 1928، اكتشافه بالصدفة عندما لاحظ أن العفن يقتل البكتيريا في مزرعته.","cat":"علوم","opts":["كوخ","فليمينغ","ليستر","باستور"],"correct":"فليمينغ"},{"q":"من كتب مسرحية 'هاملت'؟","a":"وليام شكسبير، كتبها حوالي عام 1600، وتُعدّ من أشهر المسرحيات في تاريخ الأدب العالمي.","cat":"فنون","opts":["ميلتون","شكسبير","جونسون","مارلو"],"correct":"شكسبير"},{"q":"من أسس شركة آبل Apple؟","a":"ستيف جوبز وستيف وزنياك ورونالد واين، أسسوها عام 1976 في مرآب منزلي بكاليفورنيا.","cat":"تقنية","opts":["جوبز ووزنياك","لاري بيدج","مارك زوكربيرغ","بيل غيتس"],"correct":"جوبز ووزنياك"},{"q":"ما هي المادة الأكثر صلابة في الطبيعة؟","a":"الماس، يُصنَّف 10 على مقياس موس للصلابة ويتكون من الكربون النقي بترتيب بلوري خاص.","cat":"علوم","opts":["الكوراندم","الماس","الكوارتز","التوباز"],"correct":"الماس"},{"q":"كم عدد لاعبي فريق كرة السلة الأساسيين في الملعب؟","a":"خمسة لاعبين لكل فريق، أي عشرة لاعبين إجمالاً، وفق قواعد NBA والفيبا.","cat":"رياضة","opts":["6","7","5","4"],"correct":"5"},{"q":"ما هو أعمق بحر أو محيط في العالم؟","a":"المحيط الهادئ، أعمق نقطة فيه خندق ماريانا بعمق 11,034 متراً تحت سطح الماء.","cat":"جغرافيا","opts":["المحيط الهادئ","الهندي","المتجمد الشمالي","الأطلسي"],"correct":"المحيط الهادئ"},{"q":"ما هو أكثر فيلم إيرادات في تاريخ السينما؟","a":"فيلم Avatar (2009) للمخرج جيمس كاميرون بإيرادات تجاوزت 2.9 مليار دولار عالمياً.","cat":"فنون","opts":["Avengers Endgame","The Lion King","Avatar","Titanic"],"correct":"Avatar"},{"q":"ما عاصمة اليابان؟","a":"طوكيو، أكبر مدينة في العالم من حيث عدد السكان بأكثر من 37 مليون نسمة في منطقتها الحضرية.","cat":"جغرافيا","opts":["كيوتو","أوساكا","ناغويا","طوكيو"],"correct":"طوكيو"},{"q":"من هو أسرع عداء في التاريخ؟","a":"أوسين بولت، حطّم الرقم القياسي العالمي للـ 100م بـ 9.58 ثانية في برلين 2009.","cat":"رياضة","opts":["يوهان بلاكي","كارل لويس","أوسين بولت","فلورنس غريفيث"],"correct":"أوسين بولت"},{"q":"ما هو العام الذي وصل فيه الإنسان إلى القمر؟","a":"1969، رحلة أبولو 11، نيل أرمسترونغ وباز ألدرين هبطا على سطح القمر بينما بقي مايكل كولينز في المدار.","cat":"تاريخ","opts":["1969","1971","1965","1967"],"correct":"1969"}],"2":[{"q":"ما هو البروتوكول الذي يربط الإنترنت عالمياً؟","a":"TCP/IP (بروتوكول التحكم بالإرسال/بروتوكول الإنترنت)، طوّره فينت سيرف وبوب كان عام 1974.","cat":"تقنية","opts":["SMTP","TCP/IP","HTTP","FTP"],"correct":"TCP/IP"},{"q":"ما هو الكوكب الأقرب إلى الشمس؟","a":"عطارد (Mercury)، يُكمل دورته حول الشمس في 88 يوماً فقط وهو الكوكب الأصغر في المجموعة الشمسية.","cat":"علوم","opts":["الزهرة","الأرض","عطارد","المريخ"],"correct":"عطارد"},{"q":"ما هو أكبر كائن حي على كوكب الأرض؟","a":"الحوت الأزرق، يصل طوله إلى 30 متراً ووزنه إلى 180 طناً — أكبر حيوان عاش على الأرض على الإطلاق.","cat":"علوم","opts":["حوت العنبر","الحوت الأزرق","الزرافة","الفيل الأفريقي"],"correct":"الحوت الأزرق"},{"q":"أي فريق فاز بأكبر عدد من ألقاب كأس العالم لكرة القدم؟","a":"البرازيل بخمسة ألقاب (1958،1962،1970،1994،2002)، تليها ألمانيا وإيطاليا بأربعة ألقاب لكل منهما.","cat":"رياضة","opts":["ألمانيا","الأرجنتين","إيطاليا","البرازيل"],"correct":"البرازيل"},{"q":"كم عظمة يحتوي جسم الإنسان البالغ؟","a":"206 عظمة، يولد الإنسان بنحو 300 عظمة لكنها تندمج مع النمو حتى تصبح 206 عند البلوغ.","cat":"علوم","opts":["212","206","208","200"],"correct":"206"},{"q":"في أي بلد بُني سور الصين العظيم؟","a":"الصين. يمتد لأكثر من 21,000 كيلومتر وبُني عبر قرون متعددة للحماية من الغزاة.","cat":"تاريخ","opts":["اليابان","الصين","المنغول","كوريا"],"correct":"الصين"},{"q":"ما هو الجهاز الذي يحول الطاقة الشمسية إلى كهرباء؟","a":"الخلايا الكهروضوئية (Solar Cells)، اكتُشفت ظاهرة الكهروضوئية عام 1839 على يد أندريه أمبير.","cat":"تقنية","opts":["المولّد","المكثّف","البطارية","الخلايا الكهروضوئية"],"correct":"الخلايا الكهروضوئية"},{"q":"من أسس شركة آبل Apple؟","a":"ستيف جوبز وستيف وزنياك ورونالد واين، أسسوها عام 1976 في مرآب منزلي بكاليفورنيا.","cat":"تقنية","opts":["لاري بيدج","جوبز ووزنياك","مارك زوكربيرغ","بيل غيتس"],"correct":"جوبز ووزنياك"},{"q":"ما هو أكبر دولة من حيث المساحة؟","a":"روسيا، تبلغ مساحتها 17.1 مليون كم²، تمتد عبر 11 منطقة زمنية من أوروبا إلى آسيا.","cat":"جغرافيا","opts":["الصين","روسيا","كندا","الولايات المتحدة"],"correct":"روسيا"},{"q":"ما هو الحرف الأكثر شيوعاً في اللغة الإنجليزية؟","a":"حرف E، يشكّل نحو 13% من جميع الحروف المستخدمة في النصوص الإنجليزية.","cat":"عامة","opts":["E","A","I","T"],"correct":"E"}],"3":[{"q":"ما هو أطول نهر في العالم؟","a":"نهر النيل بطول 6650 كم، يجري عبر 11 دولة أفريقية وينتهي في البحر المتوسط.","cat":"جغرافيا","opts":["الأمازون","اليانغتسي","النيل","المسيسيبي"],"correct":"النيل"},{"q":"ما هو صاحب أطول مسيرة في تاريخ كرة القدم الدولية؟","a":"كريستيانو رونالدو، الرجل الأكثر تهديفاً في تاريخ كرة القدم الدولية بأكثر من 130 هدفاً.","cat":"رياضة","opts":["رونالدو","ميسي","بيليه","علي داعي"],"correct":"رونالدو"},{"q":"في أي عام انتهت الحرب العالمية الثانية؟","a":"عام 1945، انتهت في أوروبا في مايو وفي المحيط الهادئ في سبتمبر بعد استسلام اليابان.","cat":"تاريخ","opts":["1944","1946","1945","1943"],"correct":"1945"},{"q":"ما هو اسم أول حاسوب رقمي إلكتروني؟","a":"ENIAC (المدمج للرقم الإلكتروني والحاسب)، بُني في جامعة بنسلفانيا 1945، وزن 30 طناً.","cat":"تقنية","opts":["UNIVAC","ENIAC","Colossus","IBM 701"],"correct":"ENIAC"},{"q":"ما هو أكثر فيلم إيرادات في تاريخ السينما؟","a":"فيلم Avatar (2009) للمخرج جيمس كاميرون بإيرادات تجاوزت 2.9 مليار دولار عالمياً.","cat":"فنون","opts":["Avengers Endgame","Titanic","Avatar","The Lion King"],"correct":"Avatar"},{"q":"من أسس شركة آبل Apple؟","a":"ستيف جوبز وستيف وزنياك ورونالد واين، أسسوها عام 1976 في مرآب منزلي بكاليفورنيا.","cat":"تقنية","opts":["لاري بيدج","مارك زوكربيرغ","جوبز ووزنياك","بيل غيتس"],"correct":"جوبز ووزنياك"},{"q":"ما هو أكبر كائن في مملكة النبات؟","a":"شجرة سيكويا العملاقة المعروفة بـ'الجنرال شيرمان' في كاليفورنيا، وزنها نحو 1,385 طناً.","cat":"علوم","opts":["السيكويا العملاقة","أسبن بوندو","بانيان","شجرة التنين"],"correct":"السيكويا العملاقة"},{"q":"من هو أكثر رئيس وزراء بريطاني بقاءً في منصبه؟","a":"روبرت والبول، بقي رئيساً للوزراء 20 عاماً (1721-1742) ويُعدّ أول رئيس وزراء بريطاني فعلياً.","cat":"تاريخ","opts":["روبرت والبول","توني بلير","ونستون تشرشل","مارغريت ثاتشر"],"correct":"روبرت والبول"},{"q":"ما هو الجهاز الذي يقيس ضغط الهواء الجوي؟","a":"البارومتر، اخترعه إيفانجيليستا توريتشيلي عام 1643 ويُستخدم في الأرصاد الجوية.","cat":"علوم","opts":["البارومتر","الثيرمومتر","المقياس الرطوبي","المنيومتر"],"correct":"البارومتر"},{"q":"ما هو أطول جسر في العالم؟","a":"جسر دانيانغ كونشان في الصين بطول 164.8 كيلومتر، وهو خط سكة حديد فائق السرعة.","cat":"عامة","opts":["جسر هونغ كونغ","دانيانغ كونشان الصيني","جسر أكاشي","جسر تشينغداو"],"correct":"دانيانغ كونشان الصيني"}],"4":[{"q":"من كان أول إنسان يصل إلى القمر؟","a":"نيل أرمسترونغ في مهمة أبولو 11، وطئ سطح القمر في 20 يوليو 1969 وقال جملته الشهيرة.","cat":"تاريخ","opts":["باز ألدرين","جون غلين","يوري غاغارين","نيل أرمسترونغ"],"correct":"نيل أرمسترونغ"},{"q":"ما هو أول فيلم ديزني؟","a":"بياض الثلج والأقزام السبعة عام 1937، أول فيلم رسوم متحركة طويل في تاريخ السينما.","cat":"فنون","opts":["بامبي","بينوكيو","بياض الثلج","سندريلا"],"correct":"بياض الثلج"},{"q":"ما هو البروتوكول الذي يربط الإنترنت عالمياً؟","a":"TCP/IP (بروتوكول التحكم بالإرسال/بروتوكول الإنترنت)، طوّره فينت سيرف وبوب كان عام 1974.","cat":"تقنية","opts":["FTP","SMTP","HTTP","TCP/IP"],"correct":"TCP/IP"},{"q":"في أي مدينة تقع برج إيفل؟","a":"باريس، عاصمة فرنسا. بُني عام 1889 للمعرض العالمي وارتفاعه 330 متراً.","cat":"جغرافيا","opts":["روما","باريس","برلين","لندن"],"correct":"باريس"},{"q":"ما هي عاصمة البرازيل؟","a":"برازيليا، بُنيت من الصفر وافتُتحت عام 1960 لتكون عاصمة، وليس ريو دي جانيرو أو ساو باولو.","cat":"جغرافيا","opts":["بيلو هوريزونتي","برازيليا","ساو باولو","ريو دي جانيرو"],"correct":"برازيليا"},{"q":"أي بلد يمتلك أكبر احتياطي نفط في العالم؟","a":"فنزويلا، تمتلك احتياطيات تُقدَّر بـ 303 مليار برميل، تليها المملكة العربية السعودية.","cat":"عامة","opts":["فنزويلا","العراق","إيران","السعودية"],"correct":"فنزويلا"},{"q":"كم قارة على كوكب الأرض؟","a":"سبع قارات: آسيا، أفريقيا، أمريكا الشمالية، أمريكا الجنوبية، أنتاركتيكا، أوروبا، أستراليا.","cat":"جغرافيا","opts":["7","6","5","8"],"correct":"7"},{"q":"ما هو أعلى جبل في العالم؟","a":"قمة إيفرست بارتفاع 8,849 متراً فوق مستوى البحر، تقع على الحدود بين نيبال والتبت.","cat":"جغرافيا","opts":["لوتسي","إيفرست","K2","كانشنجونغا"],"correct":"إيفرست"},{"q":"من كتب 'ألف ليلة وليلة'؟","a":"لا يوجد مؤلف واحد، بل هو تراث شعبي جُمع عبر قرون من ثقافات عربية وفارسية وهندية متعددة.","cat":"فنون","opts":["الجاحظ","ابن بطوطة","ابن المقفع","مؤلف مجهول/تراث شعبي"],"correct":"مؤلف مجهول/تراث شعبي"},{"q":"من هو أسرع عداء في التاريخ؟","a":"أوسين بولت، حطّم الرقم القياسي العالمي للـ 100م بـ 9.58 ثانية في برلين 2009.","cat":"رياضة","opts":["أوسين بولت","كارل لويس","فلورنس غريفيث","يوهان بلاكي"],"correct":"أوسين بولت"}],"5":[{"q":"ما هو أقدم دين ما زال يُمارَس حتى اليوم؟","a":"الهندوسية، يعود إلى ما قبل 4,500 سنة في شبه القارة الهندية، وهو أقدم الأديان الكبرى الحية.","cat":"تاريخ","opts":["البوذية","اليهودية","الهندوسية","الزرادشتية"],"correct":"الهندوسية"},{"q":"من نشر نظرية النسبية؟","a":"ألبرت أينشتاين، نشر النسبية الخاصة عام 1905 والنسبية العامة عام 1915، مغيّراً فهمنا للزمن والفضاء.","cat":"علوم","opts":["بور","نيوتن","بلانك","أينشتاين"],"correct":"أينشتاين"},{"q":"ما هو أكثر عنصر شيوعاً في قشرة الأرض؟","a":"الأكسجين بنسبة 46%، يليه السيليكون بنسبة 28%، فالألمنيوم بنسبة 8%.","cat":"علوم","opts":["الحديد","الأكسجين","الألمنيوم","السيليكون"],"correct":"الأكسجين"},{"q":"من اكتشف قانون الجاذبية؟","a":"إسحاق نيوتن، صاغ قوانين الحركة والجاذبية في القرن السابع عشر، وقيل إن رؤيته لتفاحة ألهمته.","cat":"علوم","opts":["أينشتاين","كيبلر","غاليليو","إسحاق نيوتن"],"correct":"إسحاق نيوتن"},{"q":"ما هي أصل كلمة 'الكيمياء'؟","a":"مشتقة من 'الخيميا' العربية، وقبلها من الكلمة المصرية القديمة 'كيمي' بمعنى الأرض السوداء.","cat":"علوم","opts":["عربي","يوناني","لاتيني","فارسي"],"correct":"عربي"},{"q":"في أي عام سقط جدار برلين؟","a":"عام 1989، في التاسع من نوفمبر، وكان ذلك إيذاناً بنهاية الحرب الباردة وتوحيد ألمانيا.","cat":"تاريخ","opts":["1991","1993","1989","1987"],"correct":"1989"},{"q":"ما هو العضو الذي يضخ الدم في جسم الإنسان؟","a":"القلب، يضخ نحو 5 لترات من الدم في الدقيقة ويضرب 100,000 مرة في اليوم.","cat":"علوم","opts":["القلب","الكلية","الكبد","الرئة"],"correct":"القلب"},{"q":"ما هو أسرع حيوان بري على وجه الأرض؟","a":"الفهد، يصل إلى 120 كم/ساعة في ثوانٍ معدودة، لكنه لا يستطيع الحفاظ على هذه السرعة طويلاً.","cat":"علوم","opts":["الفهد","الأسد","الغزال","النمر"],"correct":"الفهد"},{"q":"ما هو الجهاز الذي يقيس ضغط الهواء الجوي؟","a":"البارومتر، اخترعه إيفانجيليستا توريتشيلي عام 1643 ويُستخدم في الأرصاد الجوية.","cat":"علوم","opts":["المنيومتر","البارومتر","المقياس الرطوبي","الثيرمومتر"],"correct":"البارومتر"},{"q":"ما هو البلد الأكثر اكتظاظاً بالسكان في العالم؟","a":"الهند تجاوزت الصين عام 2023 لتصبح الأكثر سكاناً بأكثر من 1.4 مليار نسمة.","cat":"جغرافيا","opts":["الولايات المتحدة","إندونيسيا","الصين","الهند"],"correct":"الهند"}],"6":[{"q":"كم عدد نجوم العلم الأمريكي؟","a":"50 نجمة، تمثل كل نجمة ولاية من ولايات الاتحاد الأمريكي الخمسين.","cat":"جغرافيا","opts":["48","45","52","50"],"correct":"50"},{"q":"ما هو أكبر صحراء في العالم؟","a":"القارة القطبية الجنوبية (أنتاركتيكا)، بمساحة 14.2 مليون كم². الصحراء الكبرى هي أكبر صحراء حارة.","cat":"جغرافيا","opts":["الصحراء الكبرى","غوبي","أنتاركتيكا","العربية"],"correct":"أنتاركتيكا"},{"q":"من كتب ملحمة الإلياذة؟","a":"هوميروس الشاعر الإغريقي، كتبها في القرن الثامن قبل الميلاد، وتحكي عن حرب طروادة.","cat":"فنون","opts":["أوفيد","سوفوكليس","فيرجيل","هوميروس"],"correct":"هوميروس"},{"q":"في أي قارة توجد دولة مصر؟","a":"أفريقيا، رغم أن شبه جزيرة سيناء تقع جغرافياً في آسيا، إلا أن مصر تُصنَّف دولة أفريقية.","cat":"جغرافيا","opts":["الشرق الأوسط","أفريقيا","أوروبا","آسيا"],"correct":"أفريقيا"},{"q":"ما هو أعلى جبل في العالم؟","a":"قمة إيفرست بارتفاع 8,849 متراً فوق مستوى البحر، تقع على الحدود بين نيبال والتبت.","cat":"جغرافيا","opts":["كانشنجونغا","إيفرست","K2","لوتسي"],"correct":"إيفرست"},{"q":"ما هي الدولة التي تمتلك أكبر غابات استوائية؟","a":"البرازيل، تحتضن 60% من مساحة غابات الأمازون المطيرة التي تُسمى 'رئة الأرض'.","cat":"جغرافيا","opts":["الكونغو","البرازيل","كولومبيا","إندونيسيا"],"correct":"البرازيل"},{"q":"كم عدد لاعبي فريق كرة السلة الأساسيين في الملعب؟","a":"خمسة لاعبين لكل فريق، أي عشرة لاعبين إجمالاً، وفق قواعد NBA والفيبا.","cat":"رياضة","opts":["5","7","4","6"],"correct":"5"},{"q":"من كان أول إنسان يصل إلى القمر؟","a":"نيل أرمسترونغ في مهمة أبولو 11، وطئ سطح القمر في 20 يوليو 1969 وقال جملته الشهيرة.","cat":"تاريخ","opts":["جون غلين","يوري غاغارين","نيل أرمسترونغ","باز ألدرين"],"correct":"نيل أرمسترونغ"},{"q":"ما هو صاحب أطول مسيرة في تاريخ كرة القدم الدولية؟","a":"كريستيانو رونالدو، الرجل الأكثر تهديفاً في تاريخ كرة القدم الدولية بأكثر من 130 هدفاً.","cat":"رياضة","opts":["علي داعي","رونالدو","ميسي","بيليه"],"correct":"رونالدو"},{"q":"من ألّف 'الكوميديا الإلهية'؟","a":"دانتي أليغييري، كتبها بالإيطالية بين 1308 و1320، وتصف رحلته الخيالية عبر الجحيم والمطهر والجنة.","cat":"فنون","opts":["دانتي","بيترارك","ماكيافيلي","بوكاتشيو"],"correct":"دانتي"}],"7":[{"q":"ما هو العام الذي وصل فيه الإنسان إلى القمر؟","a":"1969، رحلة أبولو 11، نيل أرمسترونغ وباز ألدرين هبطا على سطح القمر بينما بقي مايكل كولينز في المدار.","cat":"تاريخ","opts":["1967","1969","1971","1965"],"correct":"1969"},{"q":"كم عدد أضلاع الماسة (المعين) الهندسي؟","a":"أربعة أضلاع متساوية، وهو شكل رباعي الأضلاع تكون فيه جميع الأضلاع متساوية الطول.","cat":"علوم","opts":["5","6","4","3"],"correct":"4"},{"q":"ما هو أكبر دولة من حيث المساحة؟","a":"روسيا، تبلغ مساحتها 17.1 مليون كم²، تمتد عبر 11 منطقة زمنية من أوروبا إلى آسيا.","cat":"جغرافيا","opts":["الصين","الولايات المتحدة","روسيا","كندا"],"correct":"روسيا"},{"q":"ما هو العضو الذي يضخ الدم في جسم الإنسان؟","a":"القلب، يضخ نحو 5 لترات من الدم في الدقيقة ويضرب 100,000 مرة في اليوم.","cat":"علوم","opts":["القلب","الرئة","الكبد","الكلية"],"correct":"القلب"},{"q":"من أسس شركة آبل Apple؟","a":"ستيف جوبز وستيف وزنياك ورونالد واين، أسسوها عام 1976 في مرآب منزلي بكاليفورنيا.","cat":"تقنية","opts":["لاري بيدج","مارك زوكربيرغ","بيل غيتس","جوبز ووزنياك"],"correct":"جوبز ووزنياك"},{"q":"كم ساعة في السنة الواحدة؟","a":"8,760 ساعة (365 × 24)، وفي السنة الكبيسة 8,784 ساعة.","cat":"علوم","opts":["8,760","9,000","8,640","8,800"],"correct":"8,760"},{"q":"ما هو أول فيلم ديزني؟","a":"بياض الثلج والأقزام السبعة عام 1937، أول فيلم رسوم متحركة طويل في تاريخ السينما.","cat":"فنون","opts":["بياض الثلج","بينوكيو","سندريلا","بامبي"],"correct":"بياض الثلج"},{"q":"في أي بلد بُني سور الصين العظيم؟","a":"الصين. يمتد لأكثر من 21,000 كيلومتر وبُني عبر قرون متعددة للحماية من الغزاة.","cat":"تاريخ","opts":["الصين","اليابان","المنغول","كوريا"],"correct":"الصين"},{"q":"ما هو أكبر صحراء في العالم؟","a":"القارة القطبية الجنوبية (أنتاركتيكا)، بمساحة 14.2 مليون كم². الصحراء الكبرى هي أكبر صحراء حارة.","cat":"جغرافيا","opts":["أنتاركتيكا","العربية","الصحراء الكبرى","غوبي"],"correct":"أنتاركتيكا"},{"q":"ما هو أكثر عنصر شيوعاً في قشرة الأرض؟","a":"الأكسجين بنسبة 46%، يليه السيليكون بنسبة 28%، فالألمنيوم بنسبة 8%.","cat":"علوم","opts":["الأكسجين","الألمنيوم","الحديد","السيليكون"],"correct":"الأكسجين"}],"8":[{"q":"ما هي أكثر لغة تحدثاً في العالم؟","a":"اللغة الإنجليزية من حيث العدد الإجمالي للناطقين (أصليين وثانويين)، تليها المندرين ثم الإسبانية.","cat":"عامة","opts":["المندرين","العربية","الإسبانية","الإنجليزية"],"correct":"الإنجليزية"},{"q":"من رسم لوحة 'موناليزا'؟","a":"ليوناردو دا فينشي، رسمها بين عامَي 1503 و1519، وتعرض حالياً في متحف اللوفر بباريس.","cat":"فنون","opts":["رافائيل","دا فينشي","بوتيتشيلي","مايكل أنجيلو"],"correct":"دا فينشي"},{"q":"من كان أول إنسان يصل إلى القمر؟","a":"نيل أرمسترونغ في مهمة أبولو 11، وطئ سطح القمر في 20 يوليو 1969 وقال جملته الشهيرة.","cat":"تاريخ","opts":["جون غلين","يوري غاغارين","نيل أرمسترونغ","باز ألدرين"],"correct":"نيل أرمسترونغ"},{"q":"ما هو الدولة التي تحتضن مقر الفيفا؟","a":"سويسرا، يقع المقر الرئيسي للفيفا في مدينة زيورخ منذ تأسيسها عام 1904.","cat":"رياضة","opts":["سويسرا","ألمانيا","فرنسا","إيطاليا"],"correct":"سويسرا"},{"q":"في أي عام انتهت الحرب العالمية الثانية؟","a":"عام 1945، انتهت في أوروبا في مايو وفي المحيط الهادئ في سبتمبر بعد استسلام اليابان.","cat":"تاريخ","opts":["1943","1945","1946","1944"],"correct":"1945"},{"q":"ما هي عاصمة أستراليا؟","a":"كانبيرا، وليس سيدني كما يظن كثيرون. بُنيت خصيصاً لتكون عاصمة وافتُتحت عام 1927.","cat":"جغرافيا","opts":["كانبيرا","بريزبان","ملبورن","سيدني"],"correct":"كانبيرا"},{"q":"كم عدد لاعبي فريق كرة السلة الأساسيين في الملعب؟","a":"خمسة لاعبين لكل فريق، أي عشرة لاعبين إجمالاً، وفق قواعد NBA والفيبا.","cat":"رياضة","opts":["7","4","6","5"],"correct":"5"},{"q":"ما هو البلد الذي اخترع الورق؟","a":"الصين، اخترع الورق تساي لون عام 105م من الخيوط والفلين والحرير والشبكات الصيدية.","cat":"تاريخ","opts":["الهند","الصين","اليابان","مصر"],"correct":"الصين"},{"q":"من أسس شركة آبل Apple؟","a":"ستيف جوبز وستيف وزنياك ورونالد واين، أسسوها عام 1976 في مرآب منزلي بكاليفورنيا.","cat":"تقنية","opts":["بيل غيتس","مارك زوكربيرغ","جوبز ووزنياك","لاري بيدج"],"correct":"جوبز ووزنياك"},{"q":"من نشر نظرية النسبية؟","a":"ألبرت أينشتاين، نشر النسبية الخاصة عام 1905 والنسبية العامة عام 1915، مغيّراً فهمنا للزمن والفضاء.","cat":"علوم","opts":["نيوتن","أينشتاين","بلانك","بور"],"correct":"أينشتاين"}],"9":[{"q":"من اخترع الطائرة؟","a":"الأخوان رايت (أورفيل وويلبر)، نجحا في أول رحلة محرّكة في 17 ديسمبر 1903 في كيتي هوك بأمريكا.","cat":"تاريخ","opts":["كليمان أدير","أوتو ليلينثال","الأخوان رايت","سانتوس دومون"],"correct":"الأخوان رايت"},{"q":"ما هو أغلى معدن في العالم؟","a":"الروديوم، يصل سعره إلى 14,000 دولار للأوقية، يُستخدم في صناعة السيارات لتنقية عوادم المحركات.","cat":"عامة","opts":["الروديوم","الإريديوم","الذهب","البلاتين"],"correct":"الروديوم"},{"q":"في أي عام قامت الثورة الفرنسية؟","a":"عام 1789، بدأت باقتحام سجن الباستيل في 14 يوليو، وغيّرت مسار التاريخ السياسي للعالم.","cat":"تاريخ","opts":["1776","1799","1804","1789"],"correct":"1789"},{"q":"ما هو الحرف الأكثر شيوعاً في اللغة الإنجليزية؟","a":"حرف E، يشكّل نحو 13% من جميع الحروف المستخدمة في النصوص الإنجليزية.","cat":"عامة","opts":["E","I","A","T"],"correct":"E"},{"q":"ما هو أطول جسر في العالم؟","a":"جسر دانيانغ كونشان في الصين بطول 164.8 كيلومتر، وهو خط سكة حديد فائق السرعة.","cat":"عامة","opts":["جسر هونغ كونغ","جسر أكاشي","دانيانغ كونشان الصيني","جسر تشينغداو"],"correct":"دانيانغ كونشان الصيني"},{"q":"كم جرام في الكيلوغرام الواحد؟","a":"ألف جرام (1000)، وهو وحدة الكتلة الأساسية في النظام الدولي للمقاييس SI.","cat":"علوم","opts":["500","1000","100","10000"],"correct":"1000"},{"q":"كم عظمة يحتوي جسم الإنسان البالغ؟","a":"206 عظمة، يولد الإنسان بنحو 300 عظمة لكنها تندمج مع النمو حتى تصبح 206 عند البلوغ.","cat":"علوم","opts":["212","208","206","200"],"correct":"206"},{"q":"ما هو الجهاز الذي يقيس شدة الزلازل؟","a":"السيزموغراف (مقياس الزلازل)، ويُعبَّر عن شدة الزلازل بمقياس ريختر أو مقياس العزم.","cat":"علوم","opts":["السيزموغراف","البارومتر","المقياس الحراري","الجيولوجي"],"correct":"السيزموغراف"},{"q":"ما هي أصل كلمة 'الكيمياء'؟","a":"مشتقة من 'الخيميا' العربية، وقبلها من الكلمة المصرية القديمة 'كيمي' بمعنى الأرض السوداء.","cat":"علوم","opts":["يوناني","لاتيني","فارسي","عربي"],"correct":"عربي"},{"q":"ما هي عاصمة أستراليا؟","a":"كانبيرا، وليس سيدني كما يظن كثيرون. بُنيت خصيصاً لتكون عاصمة وافتُتحت عام 1927.","cat":"جغرافيا","opts":["سيدني","بريزبان","كانبيرا","ملبورن"],"correct":"كانبيرا"}],"10":[{"q":"من هو مؤسس علم الجبر؟","a":"محمد بن موسى الخوارزمي، العالم العربي الذي أسّس علم الجبر في القرن التاسع الميلادي، ومنه اشتُقّ الاسم.","cat":"تاريخ","opts":["الخوارزمي","الكندي","الفارابي","ابن سينا"],"correct":"الخوارزمي"},{"q":"من اخترع المصباح الكهربائي؟","a":"توماس إديسون، طور أول مصباح عملي عام 1879 وحصل على براءة اختراع له.","cat":"تقنية","opts":["توماس إديسون","ألكسندر بيل","بنيامين فرانكلين","نيكولا تسلا"],"correct":"توماس إديسون"},{"q":"أي بلد يمتلك أكبر احتياطي نفط في العالم؟","a":"فنزويلا، تمتلك احتياطيات تُقدَّر بـ 303 مليار برميل، تليها المملكة العربية السعودية.","cat":"عامة","opts":["فنزويلا","إيران","العراق","السعودية"],"correct":"فنزويلا"},{"q":"ما هو الرقم العشري الثابت (باي π) تقريباً؟","a":"3.14159، ويمثّل نسبة محيط الدائرة إلى قطرها وهو رقم لا نهائي وغير متكرر.","cat":"علوم","opts":["3.14159","3.1416","22/7","3.14"],"correct":"3.14159"},{"q":"من ألّف 'الكوميديا الإلهية'؟","a":"دانتي أليغييري، كتبها بالإيطالية بين 1308 و1320، وتصف رحلته الخيالية عبر الجحيم والمطهر والجنة.","cat":"فنون","opts":["دانتي","بوكاتشيو","بيترارك","ماكيافيلي"],"correct":"دانتي"},{"q":"ما هو أطول جسر في العالم؟","a":"جسر دانيانغ كونشان في الصين بطول 164.8 كيلومتر، وهو خط سكة حديد فائق السرعة.","cat":"عامة","opts":["جسر هونغ كونغ","دانيانغ كونشان الصيني","جسر أكاشي","جسر تشينغداو"],"correct":"دانيانغ كونشان الصيني"},{"q":"في أي بلد بُني سور الصين العظيم؟","a":"الصين. يمتد لأكثر من 21,000 كيلومتر وبُني عبر قرون متعددة للحماية من الغزاة.","cat":"تاريخ","opts":["الصين","اليابان","المنغول","كوريا"],"correct":"الصين"},{"q":"من كتب مسرحية 'هاملت'؟","a":"وليام شكسبير، كتبها حوالي عام 1600، وتُعدّ من أشهر المسرحيات في تاريخ الأدب العالمي.","cat":"فنون","opts":["مارلو","ميلتون","شكسبير","جونسون"],"correct":"شكسبير"},{"q":"من كتب ملحمة الإلياذة؟","a":"هوميروس الشاعر الإغريقي، كتبها في القرن الثامن قبل الميلاد، وتحكي عن حرب طروادة.","cat":"فنون","opts":["أوفيد","سوفوكليس","هوميروس","فيرجيل"],"correct":"هوميروس"},{"q":"ما هي أصغر دولة في العالم من حيث المساحة؟","a":"مدينة الفاتيكان، تبلغ مساحتها نحو 0.44 كيلومتر مربع وتقع داخل روما الإيطالية.","cat":"جغرافيا","opts":["سان مارينو","الفاتيكان","موناكو","ليختنشتاين"],"correct":"الفاتيكان"}],"11":[{"q":"ما هي أصل كلمة 'الكيمياء'؟","a":"مشتقة من 'الخيميا' العربية، وقبلها من الكلمة المصرية القديمة 'كيمي' بمعنى الأرض السوداء.","cat":"علوم","opts":["فارسي","يوناني","عربي","لاتيني"],"correct":"عربي"},{"q":"من اخترع الهاتف؟","a":"ألكسندر غراهام بيل، اخترعه عام 1876 وحصل على أول براءة اختراع للهاتف.","cat":"تقنية","opts":["توماس إديسون","غوليلمو ماركوني","نيكولا تسلا","ألكسندر غراهام بيل"],"correct":"ألكسندر غراهام بيل"},{"q":"من رسم 'ليلة النجوم'؟","a":"فنسنت فان غوخ، رسمها عام 1889 أثناء إقامته في مستشفى نفسي بسان ريمي، وتعرض في متحف MoMA.","cat":"فنون","opts":["فان غوخ","بيكاسو","مونيه","ماتيس"],"correct":"فان غوخ"},{"q":"من هو مكتشف البنسلين؟","a":"ألكسندر فليمينغ عام 1928، اكتشافه بالصدفة عندما لاحظ أن العفن يقتل البكتيريا في مزرعته.","cat":"علوم","opts":["كوخ","فليمينغ","ليستر","باستور"],"correct":"فليمينغ"},{"q":"ما هو أعلى جبل في العالم؟","a":"قمة إيفرست بارتفاع 8,849 متراً فوق مستوى البحر، تقع على الحدود بين نيبال والتبت.","cat":"جغرافيا","opts":["كانشنجونغا","إيفرست","K2","لوتسي"],"correct":"إيفرست"},{"q":"ما هو أكبر كائن في مملكة النبات؟","a":"شجرة سيكويا العملاقة المعروفة بـ'الجنرال شيرمان' في كاليفورنيا، وزنها نحو 1,385 طناً.","cat":"علوم","opts":["أسبن بوندو","بانيان","السيكويا العملاقة","شجرة التنين"],"correct":"السيكويا العملاقة"},{"q":"من كتب 'ألف ليلة وليلة'؟","a":"لا يوجد مؤلف واحد، بل هو تراث شعبي جُمع عبر قرون من ثقافات عربية وفارسية وهندية متعددة.","cat":"فنون","opts":["ابن بطوطة","الجاحظ","ابن المقفع","مؤلف مجهول/تراث شعبي"],"correct":"مؤلف مجهول/تراث شعبي"},{"q":"ما هي أقدم حضارة في تاريخ البشرية؟","a":"الحضارة السومرية في بلاد الرافدين (العراق)، نشأت قبل 6000 عام وأبتكرت الكتابة والعجلة والقوانين.","cat":"تاريخ","opts":["الصينية","الهندية","المصرية","السومرية"],"correct":"السومرية"},{"q":"كم عدد حواس الإنسان الأساسية؟","a":"خمس حواس: البصر، السمع، الشم، التذوق، واللمس — وإن كان العلم الحديث يعترف بحواس إضافية.","cat":"علوم","opts":["5","6","4","7"],"correct":"5"},{"q":"ما هو البلد الأكثر اكتظاظاً بالسكان في العالم؟","a":"الهند تجاوزت الصين عام 2023 لتصبح الأكثر سكاناً بأكثر من 1.4 مليار نسمة.","cat":"جغرافيا","opts":["الولايات المتحدة","الصين","الهند","إندونيسيا"],"correct":"الهند"}],"12":[{"q":"ما هو الدولة التي تحتضن مقر الفيفا؟","a":"سويسرا، يقع المقر الرئيسي للفيفا في مدينة زيورخ منذ تأسيسها عام 1904.","cat":"رياضة","opts":["ألمانيا","إيطاليا","فرنسا","سويسرا"],"correct":"سويسرا"},{"q":"ما هي الدولة التي تمتلك أكبر غابات استوائية؟","a":"البرازيل، تحتضن 60% من مساحة غابات الأمازون المطيرة التي تُسمى 'رئة الأرض'.","cat":"جغرافيا","opts":["كولومبيا","إندونيسيا","البرازيل","الكونغو"],"correct":"البرازيل"},{"q":"من اخترع الهاتف؟","a":"ألكسندر غراهام بيل، اخترعه عام 1876 وحصل على أول براءة اختراع للهاتف.","cat":"تقنية","opts":["توماس إديسون","ألكسندر غراهام بيل","غوليلمو ماركوني","نيكولا تسلا"],"correct":"ألكسندر غراهام بيل"},{"q":"ما هي لغة البرمجة التي طورها جيمس غوسلينغ؟","a":"جافا Java، طوّرها في شركة Sun Microsystems وأُطلقت عام 1995 وتُستخدم في المليارات من الأجهزة.","cat":"تقنية","opts":["بايثون","C++","جافا","روبي"],"correct":"جافا"},{"q":"ما هو أعمق بحر أو محيط في العالم؟","a":"المحيط الهادئ، أعمق نقطة فيه خندق ماريانا بعمق 11,034 متراً تحت سطح الماء.","cat":"جغرافيا","opts":["المحيط الهادئ","الأطلسي","المتجمد الشمالي","الهندي"],"correct":"المحيط الهادئ"},{"q":"ما هو أسرع حيوان بري على وجه الأرض؟","a":"الفهد، يصل إلى 120 كم/ساعة في ثوانٍ معدودة، لكنه لا يستطيع الحفاظ على هذه السرعة طويلاً.","cat":"علوم","opts":["الغزال","النمر","الأسد","الفهد"],"correct":"الفهد"},{"q":"من صمّم كاتدرائية سيستين الشهيرة؟","a":"مايكل أنجيلو رسم سقفها بين 1508 و1512، وهي من أعظم التحف الفنية في تاريخ البشرية.","cat":"فنون","opts":["مايكل أنجيلو","رافائيل","دا فينشي","برانتي"],"correct":"مايكل أنجيلو"},{"q":"من اخترع الطائرة؟","a":"الأخوان رايت (أورفيل وويلبر)، نجحا في أول رحلة محرّكة في 17 ديسمبر 1903 في كيتي هوك بأمريكا.","cat":"تاريخ","opts":["أوتو ليلينثال","سانتوس دومون","كليمان أدير","الأخوان رايت"],"correct":"الأخوان رايت"},{"q":"من هو مؤسس علم الجبر؟","a":"محمد بن موسى الخوارزمي، العالم العربي الذي أسّس علم الجبر في القرن التاسع الميلادي، ومنه اشتُقّ الاسم.","cat":"تاريخ","opts":["الكندي","الفارابي","الخوارزمي","ابن سينا"],"correct":"الخوارزمي"},{"q":"ما هو العضو الذي يضخ الدم في جسم الإنسان؟","a":"القلب، يضخ نحو 5 لترات من الدم في الدقيقة ويضرب 100,000 مرة في اليوم.","cat":"علوم","opts":["القلب","الكبد","الكلية","الرئة"],"correct":"القلب"}],"13":[{"q":"في أي مدينة تقع برج إيفل؟","a":"باريس، عاصمة فرنسا. بُني عام 1889 للمعرض العالمي وارتفاعه 330 متراً.","cat":"جغرافيا","opts":["باريس","برلين","روما","لندن"],"correct":"باريس"},{"q":"من كتب ملحمة الإلياذة؟","a":"هوميروس الشاعر الإغريقي، كتبها في القرن الثامن قبل الميلاد، وتحكي عن حرب طروادة.","cat":"فنون","opts":["فيرجيل","هوميروس","أوفيد","سوفوكليس"],"correct":"هوميروس"},{"q":"ما هو أعمق بحر أو محيط في العالم؟","a":"المحيط الهادئ، أعمق نقطة فيه خندق ماريانا بعمق 11,034 متراً تحت سطح الماء.","cat":"جغرافيا","opts":["الهندي","المحيط الهادئ","الأطلسي","المتجمد الشمالي"],"correct":"المحيط الهادئ"},{"q":"في أي بلد بُني سور الصين العظيم؟","a":"الصين. يمتد لأكثر من 21,000 كيلومتر وبُني عبر قرون متعددة للحماية من الغزاة.","cat":"تاريخ","opts":["المنغول","الصين","كوريا","اليابان"],"correct":"الصين"},{"q":"ما هو العضو الذي يضخ الدم في جسم الإنسان؟","a":"القلب، يضخ نحو 5 لترات من الدم في الدقيقة ويضرب 100,000 مرة في اليوم.","cat":"علوم","opts":["الكبد","الكلية","القلب","الرئة"],"correct":"القلب"},{"q":"ما هو صاحب أطول مسيرة في تاريخ كرة القدم الدولية؟","a":"كريستيانو رونالدو، الرجل الأكثر تهديفاً في تاريخ كرة القدم الدولية بأكثر من 130 هدفاً.","cat":"رياضة","opts":["علي داعي","بيليه","ميسي","رونالدو"],"correct":"رونالدو"},{"q":"ما هو أكبر دولة من حيث المساحة؟","a":"روسيا، تبلغ مساحتها 17.1 مليون كم²، تمتد عبر 11 منطقة زمنية من أوروبا إلى آسيا.","cat":"جغرافيا","opts":["روسيا","الصين","الولايات المتحدة","كندا"],"correct":"روسيا"},{"q":"ما هي أصل كلمة 'الكيمياء'؟","a":"مشتقة من 'الخيميا' العربية، وقبلها من الكلمة المصرية القديمة 'كيمي' بمعنى الأرض السوداء.","cat":"علوم","opts":["عربي","لاتيني","فارسي","يوناني"],"correct":"عربي"},{"q":"ما هو أطول جسر في العالم؟","a":"جسر دانيانغ كونشان في الصين بطول 164.8 كيلومتر، وهو خط سكة حديد فائق السرعة.","cat":"عامة","opts":["جسر أكاشي","دانيانغ كونشان الصيني","جسر هونغ كونغ","جسر تشينغداو"],"correct":"دانيانغ كونشان الصيني"},{"q":"ما هو أعلى جبل في العالم؟","a":"قمة إيفرست بارتفاع 8,849 متراً فوق مستوى البحر، تقع على الحدود بين نيبال والتبت.","cat":"جغرافيا","opts":["K2","لوتسي","كانشنجونغا","إيفرست"],"correct":"إيفرست"}],"14":[{"q":"كم جرام في الكيلوغرام الواحد؟","a":"ألف جرام (1000)، وهو وحدة الكتلة الأساسية في النظام الدولي للمقاييس SI.","cat":"علوم","opts":["10000","1000","100","500"],"correct":"1000"},{"q":"كم يوم يستغرق دوران الأرض حول الشمس؟","a":"365 يوماً و6 ساعات تقريباً، ولذا نضيف يوماً كل 4 سنوات (السنة الكبيسة) تصحيحاً للحساب.","cat":"علوم","opts":["360","366","365","364"],"correct":"365"},{"q":"كم ساعة في السنة الواحدة؟","a":"8,760 ساعة (365 × 24)، وفي السنة الكبيسة 8,784 ساعة.","cat":"علوم","opts":["8,760","9,000","8,640","8,800"],"correct":"8,760"},{"q":"من هو أكثر رئيس وزراء بريطاني بقاءً في منصبه؟","a":"روبرت والبول، بقي رئيساً للوزراء 20 عاماً (1721-1742) ويُعدّ أول رئيس وزراء بريطاني فعلياً.","cat":"تاريخ","opts":["توني بلير","مارغريت ثاتشر","ونستون تشرشل","روبرت والبول"],"correct":"روبرت والبول"},{"q":"ما هو أصغر قارة في العالم؟","a":"أستراليا (القارة)، تبلغ مساحتها 7.69 مليون كم²، وهي القارة الوحيدة التي تُشكّل دولة واحدة.","cat":"جغرافيا","opts":["أمريكا الجنوبية","أنتاركتيكا","أوروبا","أستراليا"],"correct":"أستراليا"},{"q":"كم دقيقة يستغرق ضوء الشمس للوصول إلى الأرض؟","a":"نحو 8 دقائق و20 ثانية، يسافر الضوء بسرعة 300,000 كم/ثانية على مسافة 150 مليون كم.","cat":"علوم","opts":["3 دقائق","15 دقيقة","5 دقائق","8 دقائق"],"correct":"8 دقائق"},{"q":"في أي عام انتهت الحرب العالمية الثانية؟","a":"عام 1945، انتهت في أوروبا في مايو وفي المحيط الهادئ في سبتمبر بعد استسلام اليابان.","cat":"تاريخ","opts":["1946","1944","1943","1945"],"correct":"1945"},{"q":"كم عدد أضلاع الماسة (المعين) الهندسي؟","a":"أربعة أضلاع متساوية، وهو شكل رباعي الأضلاع تكون فيه جميع الأضلاع متساوية الطول.","cat":"علوم","opts":["3","4","5","6"],"correct":"4"},{"q":"من رسم لوحة 'موناليزا'؟","a":"ليوناردو دا فينشي، رسمها بين عامَي 1503 و1519، وتعرض حالياً في متحف اللوفر بباريس.","cat":"فنون","opts":["مايكل أنجيلو","دا فينشي","رافائيل","بوتيتشيلي"],"correct":"دا فينشي"},{"q":"كم لتراً من الدم يحتوي جسم الإنسان تقريباً؟","a":"نحو 5-6 لترات لشخص بالغ متوسط الحجم، وتُشكّل الدم نحو 7-8% من وزن الجسم.","cat":"علوم","opts":["2-3 لترات","7-8 لترات","5-6 لترات","3-4 لترات"],"correct":"5-6 لترات"}],"15":[{"q":"من كتب ملحمة الإلياذة؟","a":"هوميروس الشاعر الإغريقي، كتبها في القرن الثامن قبل الميلاد، وتحكي عن حرب طروادة.","cat":"فنون","opts":["أوفيد","هوميروس","فيرجيل","سوفوكليس"],"correct":"هوميروس"},{"q":"من هو أسرع عداء في التاريخ؟","a":"أوسين بولت، حطّم الرقم القياسي العالمي للـ 100م بـ 9.58 ثانية في برلين 2009.","cat":"رياضة","opts":["كارل لويس","فلورنس غريفيث","أوسين بولت","يوهان بلاكي"],"correct":"أوسين بولت"},{"q":"من هو مؤلف رواية '1984'؟","a":"جورج أورويل، نشرها عام 1949، وتتنبأ بمجتمع استبدادي تُراقَب فيه كل تصرفات المواطنين.","cat":"فنون","opts":["ريي برادبري","فرانز كافكا","ألدوس هكسلي","جورج أورويل"],"correct":"جورج أورويل"},{"q":"من رسم لوحة 'موناليزا'؟","a":"ليوناردو دا فينشي، رسمها بين عامَي 1503 و1519، وتعرض حالياً في متحف اللوفر بباريس.","cat":"فنون","opts":["مايكل أنجيلو","بوتيتشيلي","دا فينشي","رافائيل"],"correct":"دا فينشي"},{"q":"كم عدد نجوم العلم الأمريكي؟","a":"50 نجمة، تمثل كل نجمة ولاية من ولايات الاتحاد الأمريكي الخمسين.","cat":"جغرافيا","opts":["50","48","45","52"],"correct":"50"},{"q":"ما هي الدولة التي تمتلك أكبر غابات استوائية؟","a":"البرازيل، تحتضن 60% من مساحة غابات الأمازون المطيرة التي تُسمى 'رئة الأرض'.","cat":"جغرافيا","opts":["الكونغو","إندونيسيا","كولومبيا","البرازيل"],"correct":"البرازيل"},{"q":"ما هو أعمق بحر أو محيط في العالم؟","a":"المحيط الهادئ، أعمق نقطة فيه خندق ماريانا بعمق 11,034 متراً تحت سطح الماء.","cat":"جغرافيا","opts":["المحيط الهادئ","الأطلسي","الهندي","المتجمد الشمالي"],"correct":"المحيط الهادئ"},{"q":"ما هو البلد الأكثر اكتظاظاً بالسكان في العالم؟","a":"الهند تجاوزت الصين عام 2023 لتصبح الأكثر سكاناً بأكثر من 1.4 مليار نسمة.","cat":"جغرافيا","opts":["إندونيسيا","الهند","الولايات المتحدة","الصين"],"correct":"الهند"},{"q":"ما هي لغة البرمجة التي طورها جيمس غوسلينغ؟","a":"جافا Java، طوّرها في شركة Sun Microsystems وأُطلقت عام 1995 وتُستخدم في المليارات من الأجهزة.","cat":"تقنية","opts":["جافا","C++","بايثون","روبي"],"correct":"جافا"},{"q":"ما هو أسرع حيوان بري على وجه الأرض؟","a":"الفهد، يصل إلى 120 كم/ساعة في ثوانٍ معدودة، لكنه لا يستطيع الحفاظ على هذه السرعة طويلاً.","cat":"علوم","opts":["الغزال","الأسد","النمر","الفهد"],"correct":"الفهد"}],"16":[{"q":"كم عدد حواس الإنسان الأساسية؟","a":"خمس حواس: البصر، السمع، الشم، التذوق، واللمس — وإن كان العلم الحديث يعترف بحواس إضافية.","cat":"علوم","opts":["6","4","7","5"],"correct":"5"},{"q":"ما هو اسم جهاز قياس درجة الحرارة؟","a":"الثيرمومتر، اخترعه غابرييل فارنهايت عام 1714 باستخدام الزئبق، وطوّر سيلسيوس مقياسه عام 1742.","cat":"علوم","opts":["الثيرمومتر","البارومتر","الأميتر","الغالفانومتر"],"correct":"الثيرمومتر"},{"q":"من رسم لوحة 'موناليزا'؟","a":"ليوناردو دا فينشي، رسمها بين عامَي 1503 و1519، وتعرض حالياً في متحف اللوفر بباريس.","cat":"فنون","opts":["رافائيل","مايكل أنجيلو","بوتيتشيلي","دا فينشي"],"correct":"دا فينشي"},{"q":"من هو مكتشف البنسلين؟","a":"ألكسندر فليمينغ عام 1928، اكتشافه بالصدفة عندما لاحظ أن العفن يقتل البكتيريا في مزرعته.","cat":"علوم","opts":["باستور","ليستر","كوخ","فليمينغ"],"correct":"فليمينغ"},{"q":"ما هو أصغر قارة في العالم؟","a":"أستراليا (القارة)، تبلغ مساحتها 7.69 مليون كم²، وهي القارة الوحيدة التي تُشكّل دولة واحدة.","cat":"جغرافيا","opts":["أوروبا","أنتاركتيكا","أمريكا الجنوبية","أستراليا"],"correct":"أستراليا"},{"q":"كم ضلعاً يمتلك المسدس الهندسي؟","a":"ستة أضلاع، ومن هنا جاء اسمه السداسي. توجد في الطبيعة في خلايا النحل.","cat":"علوم","opts":["7","8","6","5"],"correct":"6"},{"q":"في أي عام انتهت الحرب العالمية الثانية؟","a":"عام 1945، انتهت في أوروبا في مايو وفي المحيط الهادئ في سبتمبر بعد استسلام اليابان.","cat":"تاريخ","opts":["1943","1944","1945","1946"],"correct":"1945"},{"q":"ما هو أعلى جبل في العالم؟","a":"قمة إيفرست بارتفاع 8,849 متراً فوق مستوى البحر، تقع على الحدود بين نيبال والتبت.","cat":"جغرافيا","opts":["إيفرست","K2","كانشنجونغا","لوتسي"],"correct":"إيفرست"},{"q":"ما هي أطول سلسلة جبال في العالم؟","a":"جبال الأنديز في أمريكا الجنوبية، بطول 7,000 كم تمتد عبر 7 دول.","cat":"جغرافيا","opts":["الروكي","الأنديز","الهيمالايا","الألب"],"correct":"الأنديز"},{"q":"في أي عام سقط جدار برلين؟","a":"عام 1989، في التاسع من نوفمبر، وكان ذلك إيذاناً بنهاية الحرب الباردة وتوحيد ألمانيا.","cat":"تاريخ","opts":["1987","1993","1989","1991"],"correct":"1989"}],"17":[{"q":"من كتب رواية 'مئة عام من العزلة'؟","a":"الروائي الكولومبي غابريال غارسيا ماركيز، الفائز بجائزة نوبل للآداب عام 1982.","cat":"فنون","opts":["خورخي لويس بورخيس","ماريو فارغاس يوسا","بابلو نيرودا","غارسيا ماركيز"],"correct":"غارسيا ماركيز"},{"q":"من كان أول إنسان يصل إلى القمر؟","a":"نيل أرمسترونغ في مهمة أبولو 11، وطئ سطح القمر في 20 يوليو 1969 وقال جملته الشهيرة.","cat":"تاريخ","opts":["يوري غاغارين","باز ألدرين","جون غلين","نيل أرمسترونغ"],"correct":"نيل أرمسترونغ"},{"q":"ما هي عاصمة البرازيل؟","a":"برازيليا، بُنيت من الصفر وافتُتحت عام 1960 لتكون عاصمة، وليس ريو دي جانيرو أو ساو باولو.","cat":"جغرافيا","opts":["ريو دي جانيرو","برازيليا","ساو باولو","بيلو هوريزونتي"],"correct":"برازيليا"},{"q":"ما هو أغلى معدن في العالم؟","a":"الروديوم، يصل سعره إلى 14,000 دولار للأوقية، يُستخدم في صناعة السيارات لتنقية عوادم المحركات.","cat":"عامة","opts":["الروديوم","الإريديوم","الذهب","البلاتين"],"correct":"الروديوم"},{"q":"ما هو العام الذي وصل فيه الإنسان إلى القمر؟","a":"1969، رحلة أبولو 11، نيل أرمسترونغ وباز ألدرين هبطا على سطح القمر بينما بقي مايكل كولينز في المدار.","cat":"تاريخ","opts":["1971","1967","1969","1965"],"correct":"1969"},{"q":"ما هو الرقم العشري الثابت (باي π) تقريباً؟","a":"3.14159، ويمثّل نسبة محيط الدائرة إلى قطرها وهو رقم لا نهائي وغير متكرر.","cat":"علوم","opts":["3.1416","3.14","22/7","3.14159"],"correct":"3.14159"},{"q":"من ألّف سيمفونية 'القدر' الشهيرة؟","a":"لودفيغ فان بيتهوفن، ألّف سيمفونيته الخامسة بين 1804 و1808، وهو كان فاقداً لسمعه جزئياً.","cat":"فنون","opts":["باخ","موزارت","بيتهوفن","شوبان"],"correct":"بيتهوفن"},{"q":"ما هو أطول نهر في العالم؟","a":"نهر النيل بطول 6650 كم، يجري عبر 11 دولة أفريقية وينتهي في البحر المتوسط.","cat":"جغرافيا","opts":["الأمازون","النيل","اليانغتسي","المسيسيبي"],"correct":"النيل"},{"q":"كم يوم يستغرق دوران الأرض حول الشمس؟","a":"365 يوماً و6 ساعات تقريباً، ولذا نضيف يوماً كل 4 سنوات (السنة الكبيسة) تصحيحاً للحساب.","cat":"علوم","opts":["364","360","365","366"],"correct":"365"},{"q":"ما هو الجهاز الذي يحول الطاقة الشمسية إلى كهرباء؟","a":"الخلايا الكهروضوئية (Solar Cells)، اكتُشفت ظاهرة الكهروضوئية عام 1839 على يد أندريه أمبير.","cat":"تقنية","opts":["البطارية","الخلايا الكهروضوئية","المولّد","المكثّف"],"correct":"الخلايا الكهروضوئية"}],"18":[{"q":"من كتب مسرحية 'هاملت'؟","a":"وليام شكسبير، كتبها حوالي عام 1600، وتُعدّ من أشهر المسرحيات في تاريخ الأدب العالمي.","cat":"فنون","opts":["شكسبير","ميلتون","جونسون","مارلو"],"correct":"شكسبير"},{"q":"ما هي عاصمة البرازيل؟","a":"برازيليا، بُنيت من الصفر وافتُتحت عام 1960 لتكون عاصمة، وليس ريو دي جانيرو أو ساو باولو.","cat":"جغرافيا","opts":["ريو دي جانيرو","برازيليا","بيلو هوريزونتي","ساو باولو"],"correct":"برازيليا"},{"q":"من رسم لوحة 'موناليزا'؟","a":"ليوناردو دا فينشي، رسمها بين عامَي 1503 و1519، وتعرض حالياً في متحف اللوفر بباريس.","cat":"فنون","opts":["مايكل أنجيلو","رافائيل","بوتيتشيلي","دا فينشي"],"correct":"دا فينشي"},{"q":"كم ميدالية ذهبية فاز بها مايكل فيلبس في الأولمبياد؟","a":"23 ميدالية ذهبية، وهو أكثر رياضي يفوز بميداليات أولمبية في التاريخ بمجموع 28 ميدالية.","cat":"رياضة","opts":["18","23","20","25"],"correct":"23"},{"q":"كم عظمة يحتوي جسم الإنسان البالغ؟","a":"206 عظمة، يولد الإنسان بنحو 300 عظمة لكنها تندمج مع النمو حتى تصبح 206 عند البلوغ.","cat":"علوم","opts":["208","206","212","200"],"correct":"206"},{"q":"كم عدد لاعبي فريق كرة السلة الأساسيين في الملعب؟","a":"خمسة لاعبين لكل فريق، أي عشرة لاعبين إجمالاً، وفق قواعد NBA والفيبا.","cat":"رياضة","opts":["6","4","7","5"],"correct":"5"},{"q":"ما هو الغاز الأكثر وفرةً في الغلاف الجوي للأرض؟","a":"النيتروجين بنسبة 78%، يليه الأكسجين بنسبة 21%، وبقية الغازات تشكّل 1% فقط.","cat":"علوم","opts":["النيتروجين","الأرغون","ثاني أكسيد الكربون","الأكسجين"],"correct":"النيتروجين"},{"q":"من هو أسرع عداء في التاريخ؟","a":"أوسين بولت، حطّم الرقم القياسي العالمي للـ 100م بـ 9.58 ثانية في برلين 2009.","cat":"رياضة","opts":["فلورنس غريفيث","يوهان بلاكي","أوسين بولت","كارل لويس"],"correct":"أوسين بولت"},{"q":"ما هو الكوكب الأقرب إلى الشمس؟","a":"عطارد (Mercury)، يُكمل دورته حول الشمس في 88 يوماً فقط وهو الكوكب الأصغر في المجموعة الشمسية.","cat":"علوم","opts":["المريخ","عطارد","الأرض","الزهرة"],"correct":"عطارد"},{"q":"كم نجمة في مجرة درب التبانة تقريباً؟","a":"بين 200 و400 مليار نجمة، وشمسنا مجرد نجمة متوسطة الحجم في ذراع من أذرعة المجرة.","cat":"علوم","opts":["200-400 مليار","مليار","مليون","تريليون"],"correct":"200-400 مليار"}],"19":[{"q":"ما هي المادة الأكثر صلابة في الطبيعة؟","a":"الماس، يُصنَّف 10 على مقياس موس للصلابة ويتكون من الكربون النقي بترتيب بلوري خاص.","cat":"علوم","opts":["الكوارتز","التوباز","الكوراندم","الماس"],"correct":"الماس"},{"q":"ما هو العنصر الكيميائي الأخف وزناً؟","a":"الهيدروجين، رمزه H ورقمه الذري 1، وهو أكثر العناصر وفرةً في الكون.","cat":"علوم","opts":["الليثيوم","الكربون","الهيليوم","الهيدروجين"],"correct":"الهيدروجين"},{"q":"من نشر نظرية النسبية؟","a":"ألبرت أينشتاين، نشر النسبية الخاصة عام 1905 والنسبية العامة عام 1915، مغيّراً فهمنا للزمن والفضاء.","cat":"علوم","opts":["بور","نيوتن","بلانك","أينشتاين"],"correct":"أينشتاين"},{"q":"كم عدد الألوان في قوس قزح؟","a":"سبعة ألوان: أحمر، برتقالي، أصفر، أخضر، أزرق، نيلي، بنفسجي.","cat":"علوم","opts":["6","5","8","7"],"correct":"7"},{"q":"ما هو الجهاز الذي يحول الطاقة الشمسية إلى كهرباء؟","a":"الخلايا الكهروضوئية (Solar Cells)، اكتُشفت ظاهرة الكهروضوئية عام 1839 على يد أندريه أمبير.","cat":"تقنية","opts":["المكثّف","المولّد","الخلايا الكهروضوئية","البطارية"],"correct":"الخلايا الكهروضوئية"},{"q":"ما هي أصل كلمة 'الكيمياء'؟","a":"مشتقة من 'الخيميا' العربية، وقبلها من الكلمة المصرية القديمة 'كيمي' بمعنى الأرض السوداء.","cat":"علوم","opts":["يوناني","لاتيني","عربي","فارسي"],"correct":"عربي"},{"q":"ما هو الجهاز الذي يقيس ضغط الهواء الجوي؟","a":"البارومتر، اخترعه إيفانجيليستا توريتشيلي عام 1643 ويُستخدم في الأرصاد الجوية.","cat":"علوم","opts":["البارومتر","المنيومتر","الثيرمومتر","المقياس الرطوبي"],"correct":"البارومتر"},{"q":"كم عدد لاعبي كرة القدم في الملعب لكل فريق؟","a":"11 لاعباً لكل فريق، أي 22 لاعباً إجمالاً في الملعب خلال المباراة.","cat":"رياضة","opts":["11","10","12","9"],"correct":"11"},{"q":"كم قارة على كوكب الأرض؟","a":"سبع قارات: آسيا، أفريقيا، أمريكا الشمالية، أمريكا الجنوبية، أنتاركتيكا، أوروبا، أستراليا.","cat":"جغرافيا","opts":["7","5","6","8"],"correct":"7"},{"q":"ما هو أكثر فيلم إيرادات في تاريخ السينما؟","a":"فيلم Avatar (2009) للمخرج جيمس كاميرون بإيرادات تجاوزت 2.9 مليار دولار عالمياً.","cat":"فنون","opts":["The Lion King","Avatar","Avengers Endgame","Titanic"],"correct":"Avatar"}],"20":[{"q":"ما هو أكبر كوكب في المجموعة الشمسية؟","a":"كوكب المشتري، حجمه أكبر من باقي الكواكب مجتمعةً وله 95 قمراً معروفاً.","cat":"علوم","opts":["زحل","نبتون","المشتري","أورانوس"],"correct":"المشتري"},{"q":"كم عدد أضلاع المثلث متساوي الأضلاع؟","a":"ثلاثة أضلاع متساوية وثلاث زوايا متساوية كل منها 60 درجة، مجموع الزوايا 180 درجة.","cat":"علوم","opts":["5","3","4","6"],"correct":"3"},{"q":"ما هو العام الذي وصل فيه الإنسان إلى القمر؟","a":"1969، رحلة أبولو 11، نيل أرمسترونغ وباز ألدرين هبطا على سطح القمر بينما بقي مايكل كولينز في المدار.","cat":"تاريخ","opts":["1967","1969","1965","1971"],"correct":"1969"},{"q":"من ألّف سيمفونية 'القدر' الشهيرة؟","a":"لودفيغ فان بيتهوفن، ألّف سيمفونيته الخامسة بين 1804 و1808، وهو كان فاقداً لسمعه جزئياً.","cat":"فنون","opts":["بيتهوفن","باخ","موزارت","شوبان"],"correct":"بيتهوفن"},{"q":"ما هو أكثر عنصر شيوعاً في قشرة الأرض؟","a":"الأكسجين بنسبة 46%، يليه السيليكون بنسبة 28%، فالألمنيوم بنسبة 8%.","cat":"علوم","opts":["السيليكون","الحديد","الأكسجين","الألمنيوم"],"correct":"الأكسجين"},{"q":"في أي بلد بُني سور الصين العظيم؟","a":"الصين. يمتد لأكثر من 21,000 كيلومتر وبُني عبر قرون متعددة للحماية من الغزاة.","cat":"تاريخ","opts":["اليابان","المنغول","الصين","كوريا"],"correct":"الصين"},{"q":"ما هو الغاز الأكثر وفرةً في الغلاف الجوي للأرض؟","a":"النيتروجين بنسبة 78%، يليه الأكسجين بنسبة 21%، وبقية الغازات تشكّل 1% فقط.","cat":"علوم","opts":["الأرغون","الأكسجين","ثاني أكسيد الكربون","النيتروجين"],"correct":"النيتروجين"},{"q":"من هو أبو الطب؟","a":"أبقراط الإغريقي (460-370 ق.م)، أرسى مبادئ الطب كعلم مستقل وقسَمه الطبي لا يزال يُستخدم حتى اليوم.","cat":"تاريخ","opts":["جالينوس","ابن سينا","الرازي","أبقراط"],"correct":"أبقراط"},{"q":"كم لتراً من الدم يحتوي جسم الإنسان تقريباً؟","a":"نحو 5-6 لترات لشخص بالغ متوسط الحجم، وتُشكّل الدم نحو 7-8% من وزن الجسم.","cat":"علوم","opts":["7-8 لترات","3-4 لترات","2-3 لترات","5-6 لترات"],"correct":"5-6 لترات"},{"q":"كم يوم يستغرق دوران الأرض حول الشمس؟","a":"365 يوماً و6 ساعات تقريباً، ولذا نضيف يوماً كل 4 سنوات (السنة الكبيسة) تصحيحاً للحساب.","cat":"علوم","opts":["360","365","364","366"],"correct":"365"}],"21":[{"q":"ما هو الغاز الأكثر وفرةً في الغلاف الجوي للأرض؟","a":"النيتروجين بنسبة 78%، يليه الأكسجين بنسبة 21%، وبقية الغازات تشكّل 1% فقط.","cat":"علوم","opts":["النيتروجين","الأرغون","ثاني أكسيد الكربون","الأكسجين"],"correct":"النيتروجين"},{"q":"ما هو أقدم لعبة رياضية في تاريخ البشرية؟","a":"المصارعة، وجدت نقوش لها في الكهوف قبل 15,000 عام، وفي سجلات المصريين القدماء منذ 3000 ق.م.","cat":"رياضة","opts":["الجري","المصارعة","الرمي","السباحة"],"correct":"المصارعة"},{"q":"ما هو البروتوكول الذي يربط الإنترنت عالمياً؟","a":"TCP/IP (بروتوكول التحكم بالإرسال/بروتوكول الإنترنت)، طوّره فينت سيرف وبوب كان عام 1974.","cat":"تقنية","opts":["HTTP","SMTP","TCP/IP","FTP"],"correct":"TCP/IP"},{"q":"ما هو أكبر كائن حي على كوكب الأرض؟","a":"الحوت الأزرق، يصل طوله إلى 30 متراً ووزنه إلى 180 طناً — أكبر حيوان عاش على الأرض على الإطلاق.","cat":"علوم","opts":["الفيل الأفريقي","الزرافة","الحوت الأزرق","حوت العنبر"],"correct":"الحوت الأزرق"},{"q":"ما هي عملة الاتحاد الأوروبي؟","a":"اليورو، اعتُمد كعملة في 20 دولة من أصل 27 دولة عضو في الاتحاد الأوروبي.","cat":"عامة","opts":["اليورو","المارك","الفرنك","الإسترليني"],"correct":"اليورو"},{"q":"ما هو الرقم العشري الثابت (باي π) تقريباً؟","a":"3.14159، ويمثّل نسبة محيط الدائرة إلى قطرها وهو رقم لا نهائي وغير متكرر.","cat":"علوم","opts":["3.14159","3.14","3.1416","22/7"],"correct":"3.14159"},{"q":"في أي قارة توجد دولة مصر؟","a":"أفريقيا، رغم أن شبه جزيرة سيناء تقع جغرافياً في آسيا، إلا أن مصر تُصنَّف دولة أفريقية.","cat":"جغرافيا","opts":["الشرق الأوسط","أفريقيا","أوروبا","آسيا"],"correct":"أفريقيا"},{"q":"ما هو الحرف الأكثر شيوعاً في اللغة الإنجليزية؟","a":"حرف E، يشكّل نحو 13% من جميع الحروف المستخدمة في النصوص الإنجليزية.","cat":"عامة","opts":["T","E","I","A"],"correct":"E"},{"q":"في أي بلد بُني سور الصين العظيم؟","a":"الصين. يمتد لأكثر من 21,000 كيلومتر وبُني عبر قرون متعددة للحماية من الغزاة.","cat":"تاريخ","opts":["اليابان","كوريا","المنغول","الصين"],"correct":"الصين"},{"q":"من هو أبو الطب؟","a":"أبقراط الإغريقي (460-370 ق.م)، أرسى مبادئ الطب كعلم مستقل وقسَمه الطبي لا يزال يُستخدم حتى اليوم.","cat":"تاريخ","opts":["أبقراط","ابن سينا","جالينوس","الرازي"],"correct":"أبقراط"}],"22":[{"q":"من كتب 'ألف ليلة وليلة'؟","a":"لا يوجد مؤلف واحد، بل هو تراث شعبي جُمع عبر قرون من ثقافات عربية وفارسية وهندية متعددة.","cat":"فنون","opts":["ابن المقفع","مؤلف مجهول/تراث شعبي","الجاحظ","ابن بطوطة"],"correct":"مؤلف مجهول/تراث شعبي"},{"q":"ما هي أطول سلسلة جبال في العالم؟","a":"جبال الأنديز في أمريكا الجنوبية، بطول 7,000 كم تمتد عبر 7 دول.","cat":"جغرافيا","opts":["الهيمالايا","الروكي","الأنديز","الألب"],"correct":"الأنديز"},{"q":"من ألّف 'الكوميديا الإلهية'؟","a":"دانتي أليغييري، كتبها بالإيطالية بين 1308 و1320، وتصف رحلته الخيالية عبر الجحيم والمطهر والجنة.","cat":"فنون","opts":["دانتي","بوكاتشيو","بيترارك","ماكيافيلي"],"correct":"دانتي"},{"q":"من هو مؤلف رواية '1984'؟","a":"جورج أورويل، نشرها عام 1949، وتتنبأ بمجتمع استبدادي تُراقَب فيه كل تصرفات المواطنين.","cat":"فنون","opts":["فرانز كافكا","جورج أورويل","ريي برادبري","ألدوس هكسلي"],"correct":"جورج أورويل"},{"q":"ما هي الدولة التي تمتلك أكبر غابات استوائية؟","a":"البرازيل، تحتضن 60% من مساحة غابات الأمازون المطيرة التي تُسمى 'رئة الأرض'.","cat":"جغرافيا","opts":["الكونغو","كولومبيا","البرازيل","إندونيسيا"],"correct":"البرازيل"},{"q":"ما هو الغاز الأكثر وفرةً في الغلاف الجوي للأرض؟","a":"النيتروجين بنسبة 78%، يليه الأكسجين بنسبة 21%، وبقية الغازات تشكّل 1% فقط.","cat":"علوم","opts":["النيتروجين","الأرغون","الأكسجين","ثاني أكسيد الكربون"],"correct":"النيتروجين"},{"q":"ما هو أول فيلم ديزني؟","a":"بياض الثلج والأقزام السبعة عام 1937، أول فيلم رسوم متحركة طويل في تاريخ السينما.","cat":"فنون","opts":["بامبي","بينوكيو","سندريلا","بياض الثلج"],"correct":"بياض الثلج"},{"q":"ما عاصمة اليابان؟","a":"طوكيو، أكبر مدينة في العالم من حيث عدد السكان بأكثر من 37 مليون نسمة في منطقتها الحضرية.","cat":"جغرافيا","opts":["أوساكا","ناغويا","طوكيو","كيوتو"],"correct":"طوكيو"},{"q":"من كتب مسرحية 'هاملت'؟","a":"وليام شكسبير، كتبها حوالي عام 1600، وتُعدّ من أشهر المسرحيات في تاريخ الأدب العالمي.","cat":"فنون","opts":["جونسون","مارلو","شكسبير","ميلتون"],"correct":"شكسبير"},{"q":"ما هو اسم أول حاسوب رقمي إلكتروني؟","a":"ENIAC (المدمج للرقم الإلكتروني والحاسب)، بُني في جامعة بنسلفانيا 1945، وزن 30 طناً.","cat":"تقنية","opts":["UNIVAC","ENIAC","Colossus","IBM 701"],"correct":"ENIAC"}],"23":[{"q":"من كان أول إنسان يصل إلى القمر؟","a":"نيل أرمسترونغ في مهمة أبولو 11، وطئ سطح القمر في 20 يوليو 1969 وقال جملته الشهيرة.","cat":"تاريخ","opts":["يوري غاغارين","جون غلين","باز ألدرين","نيل أرمسترونغ"],"correct":"نيل أرمسترونغ"},{"q":"ما هي الدولة التي تمتلك أكبر غابات استوائية؟","a":"البرازيل، تحتضن 60% من مساحة غابات الأمازون المطيرة التي تُسمى 'رئة الأرض'.","cat":"جغرافيا","opts":["الكونغو","كولومبيا","البرازيل","إندونيسيا"],"correct":"البرازيل"},{"q":"من هو أسرع عداء في التاريخ؟","a":"أوسين بولت، حطّم الرقم القياسي العالمي للـ 100م بـ 9.58 ثانية في برلين 2009.","cat":"رياضة","opts":["كارل لويس","فلورنس غريفيث","أوسين بولت","يوهان بلاكي"],"correct":"أوسين بولت"},{"q":"كم نجمة في مجرة درب التبانة تقريباً؟","a":"بين 200 و400 مليار نجمة، وشمسنا مجرد نجمة متوسطة الحجم في ذراع من أذرعة المجرة.","cat":"علوم","opts":["مليار","مليون","200-400 مليار","تريليون"],"correct":"200-400 مليار"},{"q":"ما هو أقدم دين ما زال يُمارَس حتى اليوم؟","a":"الهندوسية، يعود إلى ما قبل 4,500 سنة في شبه القارة الهندية، وهو أقدم الأديان الكبرى الحية.","cat":"تاريخ","opts":["اليهودية","البوذية","الزرادشتية","الهندوسية"],"correct":"الهندوسية"},{"q":"كم عدد حواس الإنسان الأساسية؟","a":"خمس حواس: البصر، السمع، الشم، التذوق، واللمس — وإن كان العلم الحديث يعترف بحواس إضافية.","cat":"علوم","opts":["6","4","5","7"],"correct":"5"},{"q":"ما هي دولة المنشأ لرياضة الجودو؟","a":"اليابان، أسّسها جيغورو كانو عام 1882 وأصبحت رياضة أولمبية عام 1964 في أولمبياد طوكيو.","cat":"رياضة","opts":["الصين","كوريا","اليابان","البرازيل"],"correct":"اليابان"},{"q":"في أي بلد بُني سور الصين العظيم؟","a":"الصين. يمتد لأكثر من 21,000 كيلومتر وبُني عبر قرون متعددة للحماية من الغزاة.","cat":"تاريخ","opts":["المنغول","كوريا","الصين","اليابان"],"correct":"الصين"},{"q":"ما هي الدولة التي اخترعت الديمقراطية؟","a":"اليونان القديمة، تحديداً أثينا في القرن الخامس قبل الميلاد، وكلمة ديمقراطية تعني 'حكم الشعب' بالإغريقية.","cat":"تاريخ","opts":["بريطانيا","أمريكا","اليونان","روما"],"correct":"اليونان"},{"q":"ما هو أكبر كائن حي على كوكب الأرض؟","a":"الحوت الأزرق، يصل طوله إلى 30 متراً ووزنه إلى 180 طناً — أكبر حيوان عاش على الأرض على الإطلاق.","cat":"علوم","opts":["الفيل الأفريقي","حوت العنبر","الحوت الأزرق","الزرافة"],"correct":"الحوت الأزرق"}],"24":[{"q":"ما هو الكوكب الأقرب إلى الشمس؟","a":"عطارد (Mercury)، يُكمل دورته حول الشمس في 88 يوماً فقط وهو الكوكب الأصغر في المجموعة الشمسية.","cat":"علوم","opts":["المريخ","الزهرة","الأرض","عطارد"],"correct":"عطارد"},{"q":"كم عدد حواس الإنسان الأساسية؟","a":"خمس حواس: البصر، السمع، الشم، التذوق، واللمس — وإن كان العلم الحديث يعترف بحواس إضافية.","cat":"علوم","opts":["4","6","5","7"],"correct":"5"},{"q":"من هو أبو الطب؟","a":"أبقراط الإغريقي (460-370 ق.م)، أرسى مبادئ الطب كعلم مستقل وقسَمه الطبي لا يزال يُستخدم حتى اليوم.","cat":"تاريخ","opts":["جالينوس","ابن سينا","الرازي","أبقراط"],"correct":"أبقراط"},{"q":"ما هو أطول جسر في العالم؟","a":"جسر دانيانغ كونشان في الصين بطول 164.8 كيلومتر، وهو خط سكة حديد فائق السرعة.","cat":"عامة","opts":["جسر أكاشي","دانيانغ كونشان الصيني","جسر هونغ كونغ","جسر تشينغداو"],"correct":"دانيانغ كونشان الصيني"},{"q":"كم ميدالية ذهبية فاز بها مايكل فيلبس في الأولمبياد؟","a":"23 ميدالية ذهبية، وهو أكثر رياضي يفوز بميداليات أولمبية في التاريخ بمجموع 28 ميدالية.","cat":"رياضة","opts":["25","18","23","20"],"correct":"23"},{"q":"كم دقيقة يستغرق ضوء الشمس للوصول إلى الأرض؟","a":"نحو 8 دقائق و20 ثانية، يسافر الضوء بسرعة 300,000 كم/ثانية على مسافة 150 مليون كم.","cat":"علوم","opts":["15 دقيقة","3 دقائق","8 دقائق","5 دقائق"],"correct":"8 دقائق"},{"q":"ما هو البلد الأكثر اكتظاظاً بالسكان في العالم؟","a":"الهند تجاوزت الصين عام 2023 لتصبح الأكثر سكاناً بأكثر من 1.4 مليار نسمة.","cat":"جغرافيا","opts":["الهند","الصين","الولايات المتحدة","إندونيسيا"],"correct":"الهند"},{"q":"من هو مكتشف البنسلين؟","a":"ألكسندر فليمينغ عام 1928، اكتشافه بالصدفة عندما لاحظ أن العفن يقتل البكتيريا في مزرعته.","cat":"علوم","opts":["باستور","فليمينغ","كوخ","ليستر"],"correct":"فليمينغ"},{"q":"كم عدد لاعبي كرة القدم في الملعب لكل فريق؟","a":"11 لاعباً لكل فريق، أي 22 لاعباً إجمالاً في الملعب خلال المباراة.","cat":"رياضة","opts":["9","12","11","10"],"correct":"11"},{"q":"ما هو عدد الكواكب في مجموعتنا الشمسية؟","a":"ثمانية كواكب: عطارد، الزهرة، الأرض، المريخ، المشتري، زحل، أورانوس، نبتون. (بلوتو خُفّض لكوكب قزم عام 2006).","cat":"علوم","opts":["10","9","8","7"],"correct":"8"}],"25":[{"q":"ما هو أعمق بحر أو محيط في العالم؟","a":"المحيط الهادئ، أعمق نقطة فيه خندق ماريانا بعمق 11,034 متراً تحت سطح الماء.","cat":"جغرافيا","opts":["المتجمد الشمالي","المحيط الهادئ","الأطلسي","الهندي"],"correct":"المحيط الهادئ"},{"q":"ما هو العام الذي وصل فيه الإنسان إلى القمر؟","a":"1969، رحلة أبولو 11، نيل أرمسترونغ وباز ألدرين هبطا على سطح القمر بينما بقي مايكل كولينز في المدار.","cat":"تاريخ","opts":["1965","1971","1967","1969"],"correct":"1969"},{"q":"ما هي المادة الأكثر صلابة في الطبيعة؟","a":"الماس، يُصنَّف 10 على مقياس موس للصلابة ويتكون من الكربون النقي بترتيب بلوري خاص.","cat":"علوم","opts":["الماس","الكوراندم","الكوارتز","التوباز"],"correct":"الماس"},{"q":"من كتب مسرحية 'هاملت'؟","a":"وليام شكسبير، كتبها حوالي عام 1600، وتُعدّ من أشهر المسرحيات في تاريخ الأدب العالمي.","cat":"فنون","opts":["مارلو","شكسبير","جونسون","ميلتون"],"correct":"شكسبير"},{"q":"ما هو الحرف الأكثر شيوعاً في اللغة الإنجليزية؟","a":"حرف E، يشكّل نحو 13% من جميع الحروف المستخدمة في النصوص الإنجليزية.","cat":"عامة","opts":["T","E","A","I"],"correct":"E"},{"q":"من رسم 'ليلة النجوم'؟","a":"فنسنت فان غوخ، رسمها عام 1889 أثناء إقامته في مستشفى نفسي بسان ريمي، وتعرض في متحف MoMA.","cat":"فنون","opts":["مونيه","فان غوخ","بيكاسو","ماتيس"],"correct":"فان غوخ"},{"q":"من نشر نظرية النسبية؟","a":"ألبرت أينشتاين، نشر النسبية الخاصة عام 1905 والنسبية العامة عام 1915، مغيّراً فهمنا للزمن والفضاء.","cat":"علوم","opts":["أينشتاين","بور","بلانك","نيوتن"],"correct":"أينشتاين"},{"q":"ما هي الدولة التي اخترعت الديمقراطية؟","a":"اليونان القديمة، تحديداً أثينا في القرن الخامس قبل الميلاد، وكلمة ديمقراطية تعني 'حكم الشعب' بالإغريقية.","cat":"تاريخ","opts":["اليونان","روما","أمريكا","بريطانيا"],"correct":"اليونان"},{"q":"ما هي الدولة التي تمتلك أكبر غابات استوائية؟","a":"البرازيل، تحتضن 60% من مساحة غابات الأمازون المطيرة التي تُسمى 'رئة الأرض'.","cat":"جغرافيا","opts":["الكونغو","إندونيسيا","البرازيل","كولومبيا"],"correct":"البرازيل"},{"q":"أي فريق فاز بأكبر عدد من ألقاب كأس العالم لكرة القدم؟","a":"البرازيل بخمسة ألقاب (1958،1962،1970،1994،2002)، تليها ألمانيا وإيطاليا بأربعة ألقاب لكل منهما.","cat":"رياضة","opts":["الأرجنتين","إيطاليا","ألمانيا","البرازيل"],"correct":"البرازيل"}],"26":[{"q":"ما هو أكبر كائن حي على كوكب الأرض؟","a":"الحوت الأزرق، يصل طوله إلى 30 متراً ووزنه إلى 180 طناً — أكبر حيوان عاش على الأرض على الإطلاق.","cat":"علوم","opts":["حوت العنبر","الزرافة","الفيل الأفريقي","الحوت الأزرق"],"correct":"الحوت الأزرق"},{"q":"ما هو أكبر كوكب في المجموعة الشمسية؟","a":"كوكب المشتري، حجمه أكبر من باقي الكواكب مجتمعةً وله 95 قمراً معروفاً.","cat":"علوم","opts":["زحل","المشتري","أورانوس","نبتون"],"correct":"المشتري"},{"q":"ما هو أقدم دين ما زال يُمارَس حتى اليوم؟","a":"الهندوسية، يعود إلى ما قبل 4,500 سنة في شبه القارة الهندية، وهو أقدم الأديان الكبرى الحية.","cat":"تاريخ","opts":["اليهودية","البوذية","الهندوسية","الزرادشتية"],"correct":"الهندوسية"},{"q":"ما هو أكبر صحراء في العالم؟","a":"القارة القطبية الجنوبية (أنتاركتيكا)، بمساحة 14.2 مليون كم². الصحراء الكبرى هي أكبر صحراء حارة.","cat":"جغرافيا","opts":["غوبي","العربية","أنتاركتيكا","الصحراء الكبرى"],"correct":"أنتاركتيكا"},{"q":"من اكتشف قانون الجاذبية؟","a":"إسحاق نيوتن، صاغ قوانين الحركة والجاذبية في القرن السابع عشر، وقيل إن رؤيته لتفاحة ألهمته.","cat":"علوم","opts":["أينشتاين","إسحاق نيوتن","غاليليو","كيبلر"],"correct":"إسحاق نيوتن"},{"q":"من هو أكثر رئيس وزراء بريطاني بقاءً في منصبه؟","a":"روبرت والبول، بقي رئيساً للوزراء 20 عاماً (1721-1742) ويُعدّ أول رئيس وزراء بريطاني فعلياً.","cat":"تاريخ","opts":["روبرت والبول","مارغريت ثاتشر","ونستون تشرشل","توني بلير"],"correct":"روبرت والبول"},{"q":"من هو أسرع عداء في التاريخ؟","a":"أوسين بولت، حطّم الرقم القياسي العالمي للـ 100م بـ 9.58 ثانية في برلين 2009.","cat":"رياضة","opts":["يوهان بلاكي","كارل لويس","فلورنس غريفيث","أوسين بولت"],"correct":"أوسين بولت"},{"q":"ما هو الدولة التي تحتضن مقر الفيفا؟","a":"سويسرا، يقع المقر الرئيسي للفيفا في مدينة زيورخ منذ تأسيسها عام 1904.","cat":"رياضة","opts":["سويسرا","ألمانيا","إيطاليا","فرنسا"],"correct":"سويسرا"},{"q":"من نشر نظرية النسبية؟","a":"ألبرت أينشتاين، نشر النسبية الخاصة عام 1905 والنسبية العامة عام 1915، مغيّراً فهمنا للزمن والفضاء.","cat":"علوم","opts":["نيوتن","بلانك","أينشتاين","بور"],"correct":"أينشتاين"},{"q":"أي بلد يمتلك أكبر احتياطي نفط في العالم؟","a":"فنزويلا، تمتلك احتياطيات تُقدَّر بـ 303 مليار برميل، تليها المملكة العربية السعودية.","cat":"عامة","opts":["السعودية","فنزويلا","العراق","إيران"],"correct":"فنزويلا"}],"27":[{"q":"ما هو أطول نهر في العالم؟","a":"نهر النيل بطول 6650 كم، يجري عبر 11 دولة أفريقية وينتهي في البحر المتوسط.","cat":"جغرافيا","opts":["المسيسيبي","النيل","اليانغتسي","الأمازون"],"correct":"النيل"},{"q":"ما هو أكبر صحراء في العالم؟","a":"القارة القطبية الجنوبية (أنتاركتيكا)، بمساحة 14.2 مليون كم². الصحراء الكبرى هي أكبر صحراء حارة.","cat":"جغرافيا","opts":["الصحراء الكبرى","أنتاركتيكا","العربية","غوبي"],"correct":"أنتاركتيكا"},{"q":"من اخترع المصباح الكهربائي؟","a":"توماس إديسون، طور أول مصباح عملي عام 1879 وحصل على براءة اختراع له.","cat":"تقنية","opts":["بنيامين فرانكلين","ألكسندر بيل","توماس إديسون","نيكولا تسلا"],"correct":"توماس إديسون"},{"q":"أي بلد يمتلك أكبر احتياطي نفط في العالم؟","a":"فنزويلا، تمتلك احتياطيات تُقدَّر بـ 303 مليار برميل، تليها المملكة العربية السعودية.","cat":"عامة","opts":["فنزويلا","السعودية","العراق","إيران"],"correct":"فنزويلا"},{"q":"ما هو الحرف الأكثر شيوعاً في اللغة الإنجليزية؟","a":"حرف E، يشكّل نحو 13% من جميع الحروف المستخدمة في النصوص الإنجليزية.","cat":"عامة","opts":["E","A","T","I"],"correct":"E"},{"q":"ما هو أسرع حيوان بري على وجه الأرض؟","a":"الفهد، يصل إلى 120 كم/ساعة في ثوانٍ معدودة، لكنه لا يستطيع الحفاظ على هذه السرعة طويلاً.","cat":"علوم","opts":["النمر","الفهد","الأسد","الغزال"],"correct":"الفهد"},{"q":"ما هو أقدم لعبة رياضية في تاريخ البشرية؟","a":"المصارعة، وجدت نقوش لها في الكهوف قبل 15,000 عام، وفي سجلات المصريين القدماء منذ 3000 ق.م.","cat":"رياضة","opts":["الرمي","السباحة","المصارعة","الجري"],"correct":"المصارعة"},{"q":"ما هي عاصمة أستراليا؟","a":"كانبيرا، وليس سيدني كما يظن كثيرون. بُنيت خصيصاً لتكون عاصمة وافتُتحت عام 1927.","cat":"جغرافيا","opts":["سيدني","ملبورن","كانبيرا","بريزبان"],"correct":"كانبيرا"},{"q":"كم عدد لاعبي كرة القدم في الملعب لكل فريق؟","a":"11 لاعباً لكل فريق، أي 22 لاعباً إجمالاً في الملعب خلال المباراة.","cat":"رياضة","opts":["10","9","12","11"],"correct":"11"},{"q":"كم نجمة في مجرة درب التبانة تقريباً؟","a":"بين 200 و400 مليار نجمة، وشمسنا مجرد نجمة متوسطة الحجم في ذراع من أذرعة المجرة.","cat":"علوم","opts":["200-400 مليار","مليار","تريليون","مليون"],"correct":"200-400 مليار"}],"28":[{"q":"من كان أول إنسان يصل إلى القمر؟","a":"نيل أرمسترونغ في مهمة أبولو 11، وطئ سطح القمر في 20 يوليو 1969 وقال جملته الشهيرة.","cat":"تاريخ","opts":["يوري غاغارين","جون غلين","باز ألدرين","نيل أرمسترونغ"],"correct":"نيل أرمسترونغ"},{"q":"من كتب مسرحية 'هاملت'؟","a":"وليام شكسبير، كتبها حوالي عام 1600، وتُعدّ من أشهر المسرحيات في تاريخ الأدب العالمي.","cat":"فنون","opts":["مارلو","ميلتون","شكسبير","جونسون"],"correct":"شكسبير"},{"q":"كم ميدالية ذهبية فاز بها مايكل فيلبس في الأولمبياد؟","a":"23 ميدالية ذهبية، وهو أكثر رياضي يفوز بميداليات أولمبية في التاريخ بمجموع 28 ميدالية.","cat":"رياضة","opts":["18","20","25","23"],"correct":"23"},{"q":"ما هو أقدم لعبة رياضية في تاريخ البشرية؟","a":"المصارعة، وجدت نقوش لها في الكهوف قبل 15,000 عام، وفي سجلات المصريين القدماء منذ 3000 ق.م.","cat":"رياضة","opts":["المصارعة","السباحة","الرمي","الجري"],"correct":"المصارعة"},{"q":"كم عدد أضلاع الماسة (المعين) الهندسي؟","a":"أربعة أضلاع متساوية، وهو شكل رباعي الأضلاع تكون فيه جميع الأضلاع متساوية الطول.","cat":"علوم","opts":["4","5","3","6"],"correct":"4"},{"q":"كم عظمة يحتوي جسم الإنسان البالغ؟","a":"206 عظمة، يولد الإنسان بنحو 300 عظمة لكنها تندمج مع النمو حتى تصبح 206 عند البلوغ.","cat":"علوم","opts":["208","206","200","212"],"correct":"206"},{"q":"ما هو أسرع حيوان بري على وجه الأرض؟","a":"الفهد، يصل إلى 120 كم/ساعة في ثوانٍ معدودة، لكنه لا يستطيع الحفاظ على هذه السرعة طويلاً.","cat":"علوم","opts":["الغزال","الأسد","النمر","الفهد"],"correct":"الفهد"},{"q":"من هو مؤسس علم الجبر؟","a":"محمد بن موسى الخوارزمي، العالم العربي الذي أسّس علم الجبر في القرن التاسع الميلادي، ومنه اشتُقّ الاسم.","cat":"تاريخ","opts":["الخوارزمي","الفارابي","الكندي","ابن سينا"],"correct":"الخوارزمي"},{"q":"ما هي أكثر لغة تحدثاً في العالم؟","a":"اللغة الإنجليزية من حيث العدد الإجمالي للناطقين (أصليين وثانويين)، تليها المندرين ثم الإسبانية.","cat":"عامة","opts":["العربية","الإنجليزية","الإسبانية","المندرين"],"correct":"الإنجليزية"},{"q":"ما هي المادة الأكثر صلابة في الطبيعة؟","a":"الماس، يُصنَّف 10 على مقياس موس للصلابة ويتكون من الكربون النقي بترتيب بلوري خاص.","cat":"علوم","opts":["التوباز","الماس","الكوراندم","الكوارتز"],"correct":"الماس"}],"29":[{"q":"ما هو اسم جهاز قياس درجة الحرارة؟","a":"الثيرمومتر، اخترعه غابرييل فارنهايت عام 1714 باستخدام الزئبق، وطوّر سيلسيوس مقياسه عام 1742.","cat":"علوم","opts":["البارومتر","الثيرمومتر","الأميتر","الغالفانومتر"],"correct":"الثيرمومتر"},{"q":"كم جرام في الكيلوغرام الواحد؟","a":"ألف جرام (1000)، وهو وحدة الكتلة الأساسية في النظام الدولي للمقاييس SI.","cat":"علوم","opts":["1000","500","10000","100"],"correct":"1000"},{"q":"ما هي عاصمة البرازيل؟","a":"برازيليا، بُنيت من الصفر وافتُتحت عام 1960 لتكون عاصمة، وليس ريو دي جانيرو أو ساو باولو.","cat":"جغرافيا","opts":["بيلو هوريزونتي","ريو دي جانيرو","برازيليا","ساو باولو"],"correct":"برازيليا"},{"q":"كم دقيقة يستغرق ضوء الشمس للوصول إلى الأرض؟","a":"نحو 8 دقائق و20 ثانية، يسافر الضوء بسرعة 300,000 كم/ثانية على مسافة 150 مليون كم.","cat":"علوم","opts":["3 دقائق","15 دقيقة","8 دقائق","5 دقائق"],"correct":"8 دقائق"},{"q":"في أي عام انتهت الحرب العالمية الثانية؟","a":"عام 1945، انتهت في أوروبا في مايو وفي المحيط الهادئ في سبتمبر بعد استسلام اليابان.","cat":"تاريخ","opts":["1945","1946","1944","1943"],"correct":"1945"},{"q":"كم ضلعاً يمتلك المسدس الهندسي؟","a":"ستة أضلاع، ومن هنا جاء اسمه السداسي. توجد في الطبيعة في خلايا النحل.","cat":"علوم","opts":["8","5","7","6"],"correct":"6"},{"q":"ما هي المادة الأكثر صلابة في الطبيعة؟","a":"الماس، يُصنَّف 10 على مقياس موس للصلابة ويتكون من الكربون النقي بترتيب بلوري خاص.","cat":"علوم","opts":["الماس","الكوراندم","الكوارتز","التوباز"],"correct":"الماس"},{"q":"في أي عام سقط جدار برلين؟","a":"عام 1989، في التاسع من نوفمبر، وكان ذلك إيذاناً بنهاية الحرب الباردة وتوحيد ألمانيا.","cat":"تاريخ","opts":["1987","1993","1991","1989"],"correct":"1989"},{"q":"ما هو الجهاز الذي يقيس شدة الزلازل؟","a":"السيزموغراف (مقياس الزلازل)، ويُعبَّر عن شدة الزلازل بمقياس ريختر أو مقياس العزم.","cat":"علوم","opts":["الجيولوجي","السيزموغراف","البارومتر","المقياس الحراري"],"correct":"السيزموغراف"},{"q":"ما هي لغة البرمجة التي طورها جيمس غوسلينغ؟","a":"جافا Java، طوّرها في شركة Sun Microsystems وأُطلقت عام 1995 وتُستخدم في المليارات من الأجهزة.","cat":"تقنية","opts":["جافا","بايثون","C++","روبي"],"correct":"جافا"}]};
+
+// ══════════════════════════════════════════
+// STORAGE
+// ══════════════════════════════════════════
+const SK='thaqafa_v9';
+function getDb(){try{const d=JSON.parse(localStorage.getItem(SK))||{};if(!d.done)d.done={};if(!d.scores)d.scores={};return d;}catch{return{done:{},scores:{}};}}
+function save(d){try{localStorage.setItem(SK,JSON.stringify(d));}catch{}}
+
+// ══════════════════════════════════════════
+// HELPERS
+// ══════════════════════════════════════════
+const WD=['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
+const MN=['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+function todayKey(){const d=new Date();return`${d.getFullYear()}-${p2(d.getMonth()+1)}-${p2(d.getDate())}`;}
+function p2(n){return String(n).padStart(2,'0');}
+function dayNum(k){return Math.floor(new Date(k).getTime()/86400000);}
+function dayIdx(k){return dayNum(k)%30;}
+function qsFor(k){return ALL_DAYS[String(dayIdx(k))]||ALL_DAYS['0'];}
+function fmtDate(k){const d=new Date(k);return`${WD[d.getDay()]} ${d.getDate()} ${MN[d.getMonth()]}`;}
+function last30(){const a=[];const t=new Date();for(let i=29;i>=0;i--){const d=new Date(t);d.setDate(t.getDate()-i);a.push(`${d.getFullYear()}-${p2(d.getMonth()+1)}-${p2(d.getDate())}`);}return a;}
+function calcStreak(done){let n=0;const t=new Date();for(let i=0;i<365;i++){const d=new Date(t);d.setDate(t.getDate()-i);const k=`${d.getFullYear()}-${p2(d.getMonth()+1)}-${p2(d.getDate())}`;if(done[k])n++;else if(i>0)break;}return n;}
+const CATS={جغرافيا:'cg',علوم:'cs',تاريخ:'ch2',فنون:'ca2',رياضة:'cr',تقنية:'ct',عامة:'ce'};
+
+// ══════════════════════════════════════════
+// CLOCK
+// ══════════════════════════════════════════
+function tick(){
+  const n=new Date();
+  const dateStr=`${WD[n.getDay()]} ${n.getDate()} ${MN[n.getMonth()]}`;
+  const timeStr=`${p2(n.getHours())}:${p2(n.getMinutes())}:${p2(n.getSeconds())}`;
+  // sidebar (desktop)
+  const sd=document.getElementById('sbDate');if(sd)sd.textContent=dateStr;
+  const st=document.getElementById('sbTime');if(st)st.textContent=timeStr;
+  // mobile header
+  const md=document.getElementById('mbDate');if(md)md.textContent=dateStr;
+  const mt=document.getElementById('mbTime');if(mt)mt.textContent=timeStr;
+}
+setInterval(tick,1000);tick();
+
+// ══════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════
+let db=getDb();
+const TODAY=todayKey();
+const TQS=qsFor(TODAY);
+let gIdx=0,gScore=0,gChosen=null;
+const arcState={};
+
+// ══════════════════════════════════════════
+// NAVIGATION
+// ══════════════════════════════════════════
+function goTo(name){
+  document.querySelectorAll('.pg').forEach(p=>p.classList.remove('on'));
+  // sidebar buttons
+  document.querySelectorAll('.snav').forEach(b=>b.classList.remove('on'));
+  // bottom nav buttons
+  document.querySelectorAll('.nb').forEach(b=>b.classList.remove('on'));
+  document.getElementById('pg-'+name).classList.add('on');
+  const sn=document.getElementById('sn-'+name);if(sn)sn.classList.add('on');
+  const nb=document.getElementById('nb-'+name);if(nb)nb.classList.add('on');
+  window.scrollTo({top:0,behavior:'smooth'});
+  if(name==='game')initGame();
+  if(name==='path')renderPath();
+  if(name==='archive')renderArchive();
+  if(name==='tracker')renderTracker();
+}
+
+// ══════════════════════════════════════════
+// STREAK UI
+// ══════════════════════════════════════════
+function updateStreak(){
+  const s=calcStreak(db.done);
+  const sb=document.getElementById('sbStreak');if(sb)sb.textContent=s;
+  const mb=document.getElementById('mbStreak');if(mb)mb.textContent=s;
+}
+
+// ══════════════════════════════════════════
+// TODAY
+// ══════════════════════════════════════════
+function renderTodayState(){
+  const done=!!db.done[TODAY];
+  document.getElementById('doneOk').classList.toggle('on',done);
+  document.getElementById('doneBtn').style.display=done?'none':'block';
+}
+function markDone(){
+  db=getDb();db.done[TODAY]=true;save(db);
+  renderTodayState();updateStreak();
+}
+function renderCards(){
+  const el=document.getElementById('cardList');el.innerHTML='';
+  TQS.forEach((item,i)=>{
+    const cc=CATS[item.cat]||'ce';
+    const d=document.createElement('div');
+    d.className='icard su';d.style.animationDelay=(i*.055)+'s';
+    d.innerHTML=`<div class="ch" onclick="this.parentElement.classList.toggle('on')">
+      <div class="cn">${i+1}</div>
+      <div class="cq">${item.q}</div>
+      <span class="cc ${cc}">${item.cat}</span>
+      <span class="ca-arr">⌄</span>
+    </div>
+    <div class="ca"><span class="cal">الإجابة</span>${item.a}</div>`;
+    el.appendChild(d);
+  });
+}
+
+// ══════════════════════════════════════════
+// GAME
+// ══════════════════════════════════════════
+function initGame(){
+  gIdx=0;gScore=0;gChosen=null;
+  document.getElementById('gRes').style.display='none';
+  document.getElementById('gCard').style.display='block';
+  renderGameQ();
+}
+function renderGameQ(){
+  if(gIdx>=TQS.length){showGameRes();return;}
+  const item=TQS[gIdx];
+  document.getElementById('gFill').style.width=((gIdx/TQS.length)*100)+'%';
+  document.getElementById('gLbl').textContent=`سؤال ${gIdx+1} من ${TQS.length}`;
+  document.getElementById('gSc').textContent=gScore;
+  document.getElementById('gQ').textContent=item.q;
+  const od=document.getElementById('gOpts');od.innerHTML='';
+  item.opts.forEach(opt=>{
+    const btn=document.createElement('button');btn.className='gopt';btn.textContent=opt;
+    btn.onclick=()=>pickOpt(btn,opt,item.correct);od.appendChild(btn);
+  });
+  document.getElementById('gFb').className='gfb';
+  document.getElementById('gNxt').style.display='none';
+  document.getElementById('gNxt').textContent=gIdx+1<TQS.length?'التالي ←':'🏁 إنهاء';
+  gChosen=null;
+}
+function pickOpt(btn,opt,correct){
+  if(gChosen)return;gChosen=opt;
+  document.querySelectorAll('.gopt').forEach(b=>{b.disabled=true;if(b.textContent===correct)b.classList.add('ok');});
+  const fb=document.getElementById('gFb');
+  if(opt===correct){btn.classList.add('ok');gScore++;fb.className='gfb on ok';fb.textContent='✅ إجابة صحيحة!';}
+  else{btn.classList.add('bad');fb.className='gfb on bad';fb.textContent=`❌ الصواب: ${correct}`;}
+  document.getElementById('gNxt').style.display='inline-block';
+}
+function nextQ(){gIdx++;if(gIdx>=TQS.length){showGameRes();return;}renderGameQ();}
+function showGameRes(){
+  document.getElementById('gFill').style.width='100%';
+  document.getElementById('gCard').style.display='none';
+  document.getElementById('gRes').style.display='block';
+  const p=(gScore/TQS.length)*100;
+  const [em,msg]=p===100?['🏆','مثالي! أنت موسوعة حقيقية!']:p>=70?['🌟','ممتاز! نتيجة رائعة']:p>=50?['👍','جيد! استمر في التعلم']:['📚','راجع المعلومات وحاول مرة أخرى'];
+  document.getElementById('gRE').textContent=em;
+  document.getElementById('gRS').textContent=`${gScore} / ${TQS.length}`;
+  document.getElementById('gRM').textContent=msg;
+  db=getDb();db.scores[TODAY]=gScore;save(db);
+}
+function completeGame(){db=getDb();db.done[TODAY]=true;save(db);updateStreak();goTo('today');}
+
+// ══════════════════════════════════════════
+// PATH
+// ══════════════════════════════════════════
+function renderPath(){
+  db=getDb();
+  const days=last30();
+  const sc=document.getElementById('pScroll');sc.innerHTML='';
+  days.forEach(k=>{
+    const isT=k===TODAY,isDone=!!db.done[k],isFut=k>TODAY;
+    let cls='pcircle'+(isDone?' dn':isT?' td':isFut?' ft':'');
+    const n=new Date(k).getDate();
+    const div=document.createElement('div');div.className='pday';
+    div.onclick=()=>showPD(k);
+    div.innerHTML=`<div class="${cls}">${isDone?'<span class="pchk">✓</span>':''}<span>${n}</span></div>
+      <div class="plbl${isT?' td':''}">${isT?'اليوم':WD[new Date(k).getDay()].slice(0,3)}</div>`;
+    sc.appendChild(div);
+    if(isT)setTimeout(()=>div.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'}),120);
+  });
+  showPD(TODAY);
+}
+function showPD(k){
+  db=getDb();
+  const el=document.getElementById('pDetail');
+  const isDone=!!db.done[k],isFut=k>TODAY,sc=db.scores[k],qs=qsFor(k);
+  let h=`<div class="sec">${fmtDate(k)}${k===TODAY?' <span style="color:var(--gold);font-size:.7rem">— اليوم</span>':''}</div>`;
+  if(isFut){h+=`<div class="empty"><div class="empi">🔮</div><p class="empt">هذا اليوم لم يأتِ بعد</p></div>`;}
+  else if(!isDone&&k!==TODAY){h+=`<div class="empty"><div class="empi">😶</div><p class="empt">لم تكمل هذا اليوم</p></div>`;}
+  else{
+    if(sc!==undefined)h+=`<div style="margin-bottom:14px;padding:11px 15px;background:rgba(13,217,200,.07);border:1px solid rgba(13,217,200,.2);border-radius:10px;color:var(--gr);font-size:.88rem;font-weight:700">🎯 نتيجة التحدي: ${sc}/${qs.length}</div>`;
+    h+=qs.map((item,i)=>{const cc=CATS[item.cat]||'ce';return`<div class="icard" onclick="this.classList.toggle('on')">
+      <div class="ch"><div class="cn">${i+1}</div><div class="cq">${item.q}</div><span class="cc ${cc}">${item.cat}</span><span class="ca-arr">⌄</span></div>
+      <div class="ca"><span class="cal">الإجابة</span>${item.a}</div></div>`;}).join('');
+  }
+  el.innerHTML=h;
+}
+
+// ══════════════════════════════════════════
+// ARCHIVE
+// ══════════════════════════════════════════
+function renderArchive(){
+  db=getDb();
+  const el=document.getElementById('arcList');
+  const days=Object.keys(db.done).sort().reverse();
+  if(!days.length){el.innerHTML=`<div class="empty"><div class="empi">📓</div><p class="empt">لا توجد أيام مكتملة بعد<br>أكمل اليوم لتظهر هنا</p></div>`;return;}
+  el.innerHTML='';
+  days.forEach(k=>{
+    const sc=db.scores[k],qs=qsFor(k);
+    const id='a'+k.replace(/-/g,'');
+    const badge=sc!==undefined?`${sc}/${qs.length} 🎯`:'✅';
+    const lbl=k===TODAY?'اليوم':fmtDate(k);
+    const div=document.createElement('div');div.className='aday';
+    div.innerHTML=`
+      <div class="ahead" onclick="toggleArc('${id}')">
+        <div class="ahL"><span class="adate">${lbl}</span><span class="adn">يوم ${dayNum(k)%30+1}</span></div>
+        <span class="abadge">${badge}</span>
+      </div>
+      <div class="abody" id="${id}">
+        <div class="atabs">
+          <button class="atab on" onclick="arcTab('${id}','r',this)">📖 مراجعة</button>
+          <button class="atab"    onclick="arcTab('${id}','g',this)">🎮 تحدي</button>
+        </div>
+        <div id="${id}-r">${qs.map(q=>`<div class="rq"><div class="rqt">❓ ${q.q}</div><div class="rqa">✅ ${q.a}</div></div>`).join('')}</div>
+        <div id="${id}-g" style="display:none">
+          <div class="mgwrap">
+            <div class="mgq" id="${id}-gq"></div>
+            <div class="mgopts" id="${id}-go"></div>
+            <div class="gfb" id="${id}-gf"></div>
+            <div class="mgnav">
+              <span class="mgsc">🎯 <span id="${id}-gs">0</span> صح</span>
+              <button class="mgnxt" id="${id}-gn" onclick="arcNext('${id}')">التالي ←</button>
+            </div>
+            <div id="${id}-gr" style="display:none;text-align:center;padding:20px 0">
+              <div style="font-size:2.2rem;margin-bottom:8px" id="${id}-gre"></div>
+              <div style="font-size:1.6rem;font-weight:900;color:var(--gold);font-family:var(--mono)" id="${id}-grs"></div>
+              <div style="color:var(--dim2);margin-top:6px;font-size:.85rem" id="${id}-grm"></div>
+              <button onclick="arcReset('${id}')" style="margin-top:12px;padding:8px 22px;background:var(--acc);border:none;border-radius:20px;color:#fff;font-weight:700;cursor:pointer;font-size:.84rem;font-family:'Tajawal',sans-serif;transition:transform .15s" onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'">🔄 إعادة</button>
+            </div>
+          </div>
+        </div>
+      </div>`;
+    el.appendChild(div);
+    arcState[id]={idx:0,score:0,chosen:null,qs};
+  });
+}
+function toggleArc(id){document.getElementById(id).classList.toggle('on');}
+function arcTab(id,tab,btn){
+  document.getElementById(id+'-r').style.display=tab==='r'?'block':'none';
+  document.getElementById(id+'-g').style.display=tab==='g'?'block':'none';
+  document.querySelectorAll(`#${id} .atab`).forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  if(tab==='g'){arcState[id]={...arcState[id],idx:0,score:0,chosen:null};arcRQ(id);}
+}
+function arcRQ(id){
+  const s=arcState[id];if(!s)return;
+  if(s.idx>=s.qs.length){arcRes(id);return;}
+  const item=s.qs[s.idx];
+  document.getElementById(id+'-gr').style.display='none';
+  document.getElementById(id+'-gq').style.display='block';
+  document.getElementById(id+'-gq').textContent=item.q;
+  document.getElementById(id+'-gs').textContent=s.score;
+  const od=document.getElementById(id+'-go');od.innerHTML='';
+  item.opts.forEach(opt=>{
+    const btn=document.createElement('button');btn.className='mgopt';btn.textContent=opt;
+    btn.onclick=()=>arcPick(id,btn,opt,item.correct);od.appendChild(btn);
+  });
+  const fb=document.getElementById(id+'-gf');if(fb)fb.className='gfb';
+  const nx=document.getElementById(id+'-gn');
+  if(nx){nx.style.display='none';nx.textContent=s.idx+1<s.qs.length?'التالي ←':'🏁 النتيجة';}
+  s.chosen=null;
+}
+function arcPick(id,btn,opt,correct){
+  const s=arcState[id];if(!s||s.chosen)return;s.chosen=opt;
+  document.querySelectorAll(`#${id}-go .mgopt`).forEach(b=>{b.disabled=true;if(b.textContent===correct)b.classList.add('ok');});
+  const fb=document.getElementById(id+'-gf');
+  if(opt===correct){btn.classList.add('ok');s.score++;fb.className='gfb on ok';fb.textContent='✅ إجابة صحيحة!';}
+  else{btn.classList.add('bad');fb.className='gfb on bad';fb.textContent=`❌ الصواب: ${correct}`;}
+  document.getElementById(id+'-gs').textContent=s.score;
+  const nx=document.getElementById(id+'-gn');if(nx)nx.style.display='inline-block';
+}
+function arcNext(id){const s=arcState[id];if(!s)return;s.idx++;if(s.idx>=s.qs.length){arcRes(id);return;}arcRQ(id);}
+function arcRes(id){
+  const s=arcState[id];if(!s)return;
+  document.getElementById(id+'-gq').style.display='none';
+  document.getElementById(id+'-go').innerHTML='';
+  const fb=document.getElementById(id+'-gf');if(fb)fb.className='gfb';
+  const nx=document.getElementById(id+'-gn');if(nx)nx.style.display='none';
+  const p=(s.score/s.qs.length)*100;
+  const [em,msg]=p===100?['🏆','مثالي!']:p>=70?['🌟','ممتاز!']:p>=50?['👍','جيد!']:['📚','راجع مجدداً'];
+  document.getElementById(id+'-gr').style.display='block';
+  document.getElementById(id+'-gre').textContent=em;
+  document.getElementById(id+'-grs').textContent=`${s.score} / ${s.qs.length}`;
+  document.getElementById(id+'-grm').textContent=msg;
+}
+function arcReset(id){
+  const s=arcState[id];if(!s)return;
+  s.idx=0;s.score=0;s.chosen=null;
+  document.getElementById(id+'-gr').style.display='none';
+  document.getElementById(id+'-gq').style.display='block';
+  arcRQ(id);
+}
+
+// ══════════════════════════════════════════
+// TRACKER
+// ══════════════════════════════════════════
+function renderTracker(){
+  db=getDb();
+  const done=Object.keys(db.done);
+  document.getElementById('stD').textContent=done.length;
+  document.getElementById('stS').textContent=calcStreak(db.done);
+  document.getElementById('stI').textContent=done.length*10;
+  const grid=document.getElementById('cGrid');grid.innerHTML='';
+  const days=last30();
+  const fw=new Date(days[0]).getDay();
+  for(let i=0;i<fw;i++){const e=document.createElement('div');e.className='cday';e.style.opacity='0';grid.appendChild(e);}
+  days.forEach(k=>{
+    const d=new Date(k),isT=k===TODAY,isDone=!!db.done[k],isPast=k<TODAY;
+    const c=document.createElement('div');
+    c.className='cday'+(isT?' td':isDone?' dn':isPast?' sk':'');
+    c.title=k;c.textContent=d.getDate();grid.appendChild(c);
+  });
+}
+
+// ══════════════════════════════════════════
+// PWA
+// ══════════════════════════════════════════
+let dPrompt=null;
+window.addEventListener('beforeinstallprompt',e=>{
+  e.preventDefault();dPrompt=e;
+  if(!localStorage.getItem('ib_hide'))document.getElementById('ib').classList.add('on');
+});
+function installPWA(){
+  if(dPrompt){dPrompt.prompt();dPrompt.userChoice.then(r=>{if(r.outcome==='accepted')hideIB();dPrompt=null;});}
+  else alert('لتثبيت التطبيق على iPhone:\n1. اضغط زر المشاركة ↑\n2. اختر "أضف إلى الشاشة الرئيسية"\n3. اضغط "إضافة"');
+}
+function hideIB(){document.getElementById('ib').classList.remove('on');localStorage.setItem('ib_hide','1');}
+window.addEventListener('appinstalled',hideIB);
+if('serviceWorker' in navigator){
+  const sw=`const C='tq2';self.addEventListener('install',e=>{e.waitUntil(caches.open(C).then(c=>c.addAll(['/'])));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))));self.clients.claim();});self.addEventListener('fetch',e=>{e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request).catch(()=>new Response(''))));});`;
+  const blob=new Blob([sw],{type:'application/javascript'});
+  navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(()=>{});
+}
+
+// ══════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════
+db=getDb();
+updateStreak();
+renderTodayState();
+renderCards();
+</script>
+</body>
+</html>
